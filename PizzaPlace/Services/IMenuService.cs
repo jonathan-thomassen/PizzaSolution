@@ -2,5 +2,5 @@
 
 public interface IMenuService
 {
-    Menu GetMenu(DateTimeOffset menuDate);
+    Task<Menu> GetMenu(DateTimeOffset menuDate);
 }
