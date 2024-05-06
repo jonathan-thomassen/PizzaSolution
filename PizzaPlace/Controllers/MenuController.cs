@@ -7,8 +7,8 @@ namespace PizzaPlace.Controllers;
 public class MenuController(TimeProvider timeProvider, IMenuService menuService) : ControllerBase
 {
     [HttpGet]
-    public IActionResult GetMenu()
+    public async Task<IActionResult> GetMenu()
     {
-        return Ok(menuService.GetMenu(timeProvider.GetUtcNow()));
+        return Ok(await menuService.GetMenu(timeProvider.GetUtcNow()));
     }
 }

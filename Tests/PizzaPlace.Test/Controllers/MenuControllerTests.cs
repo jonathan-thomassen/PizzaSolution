@@ -11,7 +11,7 @@ public class MenuControllerTests
         new(timeProvider, menuService.Object);
 
     [TestMethod]
-    public void GetMenu()
+    public async void GetMenu()
     {
         // Arrange
         var time = new DateTimeOffset(2030, 10, 12, 0, 0, 0, TimeSpan.Zero);
@@ -20,12 +20,12 @@ public class MenuControllerTests
 
         var menuService = new Mock<IMenuService>(MockBehavior.Strict);
         menuService.Setup(x => x.GetMenu(time))
-            .Returns(menu);
+            .ReturnsAsync(menu);
 
         var controller = GetController(timeProvider, menuService);
 
         // Act
-        var actual = controller.GetMenu();
+        var actual = await controller.GetMenu();
 
         // Assert
         Assert.IsInstanceOfType<OkObjectResult>(actual);
