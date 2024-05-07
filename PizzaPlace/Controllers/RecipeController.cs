@@ -4,7 +4,7 @@ using PizzaPlace.Services;
 
 namespace PizzaPlace.Controllers;
 
-[Route("api/menu")]
+[Route("api/recipe")]
 public class RecipeController(IRecipeService recipeService) : ControllerBase
 {
     [HttpPost]
@@ -13,7 +13,7 @@ public class RecipeController(IRecipeService recipeService) : ControllerBase
         return Ok(recipeService.AddPizzaRecipe(recipe));
     }
 
-    [HttpPost]
+    [HttpPut]
     public async Task<IActionResult> UpdateRecipe([FromBody] PizzaRecipeDto recipe, long id)
     {
         return Ok(recipeService.UpdatePizzaRecipe(recipe, id));

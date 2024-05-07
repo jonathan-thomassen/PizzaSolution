@@ -46,6 +46,7 @@ var app = builder.Build();
 
 app.UseOpenApi();
 app.UseSwaggerUi();
+app.UseDeveloperExceptionPage();
 
 app.UseCors();
 
