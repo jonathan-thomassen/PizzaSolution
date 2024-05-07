@@ -16,7 +16,7 @@ public class StockService(IStockRepository stockRepository) : IStockService
                     foreach (var ingredient in recipe.Ingredients)
                     {
                         var stockDto = await stockRepository.GetStock(ingredient.StockType);
-                        if (stockDto.Amount < ingredient.Amount)
+                        if (stockDto == null || stockDto.Amount < ingredient.Amount)
                         {
                             return true;
                         }

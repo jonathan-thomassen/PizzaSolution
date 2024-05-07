@@ -1,4 +1,4 @@
-﻿using PizzaPlace.Models.Types;
+﻿using PizzaPlace.Models;
 using PizzaPlace.Repositories;
 using PizzaPlace.Services;
 
@@ -11,12 +11,25 @@ public class StockServiceTests
         new(stockRepository.Object);
 
     [TestMethod]
-    public async Task GetStockOfRecipe()
+    public async Task HasInsufficientStock()
     {
         // Arrange
+        var pAmount = new PizzaAmount(Models.Types.PizzaRecipeType.StandardPizza, 2);
+        var order = new PizzaOrder(new ComparableList<PizzaAmount>() {pAmount});
+
+        var recipeDto = new PizzaRecipeDto(Models.Types.PizzaRecipeType.StandardPizza, new ComparableList<StockDto>() { new StockDto(Models.Types.StockType.Dough, 1), new StockDto(Models.Types.StockType.Tomatoes, 1) }, 12);
+
+        bool expected = true;
+
+        var stockRepository = new Mock<IStockRepository>();
+
+        var service = GetService(stockRepository);
 
         // Act
+        var actual = await service.HasInsufficientStock(order, new ComparableList<PizzaRecipeDto>() { recipeDto });
 
         // Assert
+        Assert.AreEqual(expected, actual);
+
     }
 }
