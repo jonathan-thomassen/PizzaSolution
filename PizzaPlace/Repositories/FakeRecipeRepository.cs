@@ -27,6 +27,19 @@ public class FakeRecipeRepository : FakeDatabase<PizzaRecipeDto>, IRecipeReposit
         return Task.FromResult(recipe);
     }
 
+    public Task<long> UpdateRecipe(PizzaRecipeDto recipe, long id)
+    {
+        lock (_lock)
+        {
+            if (Get(x => x.Id == recipe.Id).Count() == 0)
+                throw new PizzaException($"No recipe exists with id {recipe.Id}.");
+
+            Update(recipe, id);
+
+            return Task.FromResult(id);
+        }
+    }
+
     public void AddStandardRecipes()
     {
         if (Get(_ => true).Any())
@@ -51,5 +64,5 @@ public class FakeRecipeRepository : FakeDatabase<PizzaRecipeDto>, IRecipeReposit
                 new StockDto(StockType.UngenericSpices, 1)
             ], 10),
         ];
-    }
+    }    
 }
