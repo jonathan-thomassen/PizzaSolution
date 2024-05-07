@@ -28,4 +28,24 @@ public class MenuServiceTests
         // Assert
         Assert.AreEqual(expected, actual);
     }
+
+    [TestMethod]
+    public async Task GetNonLunchMenu()
+    {
+        // Arrange
+        var itemsLunch = new ComparableList<MenuItem>
+        {
+            new MenuItem("Non-Lunch Pizza", PizzaRecipeType.StandardPizza, 18.0)
+        };
+        Menu expected = new Menu("It ain't lunch, boy", itemsLunch);
+        var time = DateTimeOffset.Parse("17:00");
+
+        var service = GetService();
+
+        // Act
+        var actual = await service.GetMenu(time);
+
+        // Assert
+        Assert.AreEqual(expected, actual);
+    }
 }

@@ -5,13 +5,49 @@ namespace PizzaPlace.Services;
 
 public class StockService(IStockRepository stockRepository) : IStockService
 {
-    public Task<bool> HasInsufficientStock(PizzaOrder order, ComparableList<PizzaRecipeDto> recipeDtos)
-    {
-        throw new NotImplementedException("Sufficient stock must be checked.");
+    public async Task<bool> HasInsufficientStock(PizzaOrder order, ComparableList<PizzaRecipeDto> recipeDtos)
+    {        
+        foreach (var pizza in order.RequestedOrder)
+        {
+            foreach (var recipe in recipeDtos)
+            {
+                if (pizza.PizzaType == recipe.RecipeType)
+                {
+                    foreach (var ingredient in recipe.Ingredients)
+                    {
+                        var stockDto = await stockRepository.GetStock(ingredient.StockType);
+                        if (stockDto.Amount < ingredient.Amount)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
-    public Task<ComparableList<StockDto>> GetStock(PizzaOrder order, ComparableList<PizzaRecipeDto> recipeDtos)
+    public async Task<ComparableList<StockDto>> GetStock(PizzaOrder order, ComparableList<PizzaRecipeDto> recipeDtos)
     {
-        throw new NotImplementedException("Getting stock must be implemented.");
+        var returnList = new ComparableList<StockDto>();
+
+        foreach (var pizza in order.RequestedOrder)
+        {
+            foreach (var recipe in recipeDtos)
+            {
+                if (pizza.PizzaType == recipe.RecipeType)
+                {
+                    foreach (var ingredient in recipe.Ingredients)
+                    {
+                        var stockDto = await stockRepository.GetStock(ingredient.StockType);
+
+                        returnList.Add(stockDto);
+                    }
+                }
+            }
+        }
+
+        return returnList;
     }
 }
