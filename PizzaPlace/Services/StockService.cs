@@ -6,7 +6,7 @@ namespace PizzaPlace.Services;
 public class StockService(IStockRepository stockRepository) : IStockService
 {
     public async Task<bool> HasInsufficientStock(PizzaOrder order, ComparableList<PizzaRecipeDto> recipeDtos)
-    {        
+    {
         foreach (var pizza in order.RequestedOrder)
         {
             foreach (var recipe in recipeDtos)
@@ -42,7 +42,10 @@ public class StockService(IStockRepository stockRepository) : IStockService
                     {
                         var stockDto = await stockRepository.GetStock(ingredient.StockType);
 
-                        returnList.Add(stockDto);
+                        if (stockDto != null)
+                        {
+                            returnList.Add(stockDto);
+                        }
                     }
                 }
             }
