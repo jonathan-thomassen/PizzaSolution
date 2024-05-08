@@ -16,7 +16,7 @@ public class AssemblyLinePizzaOven(TimeProvider timeProvider) : PizzaOven(timePr
     public const int MinimumCookingTimeMinutes = 4;
 
     private PizzaRecipeType? _previousRecipeType = null;
-    private bool _ovenReady = false;
+    private int _timeSavingsMinutes = SubsequentPizzaTimeSavingsInMinutes;
 
     protected override int Capacity => AssemblyLineCapacity;
 
@@ -30,24 +30,19 @@ public class AssemblyLinePizzaOven(TimeProvider timeProvider) : PizzaOven(timePr
 
     private Func<Task<Pizza?>> MakePizza(PizzaRecipeDto recipe) => async () =>
     {
-        if (!_ovenReady)
-        {
-            _previousRecipeType = null;
-            await Task.Delay(TimeSpan.FromMinutes(SetupTimeMinutes), timeProvider);
-            _ovenReady = true;
-        }
-
         if (recipe.RecipeType == _previousRecipeType)
         {
-            var cookingTimeMinutes = recipe.CookingTimeMinutes - SubsequentPizzaTimeSavingsInMinutes;
+            var cookingTimeMinutes = SetupTimeMinutes + recipe.CookingTimeMinutes - _timeSavingsMinutes;
             if (cookingTimeMinutes < MinimumCookingTimeMinutes)
             {
                 cookingTimeMinutes = MinimumCookingTimeMinutes;
             }
+            _timeSavingsMinutes += SubsequentPizzaTimeSavingsInMinutes;
             await CookPizza(cookingTimeMinutes);
         } else
         {
-            await CookPizza(recipe.CookingTimeMinutes);
+            await CookPizza(SetupTimeMinutes + recipe.CookingTimeMinutes);
+            _timeSavingsMinutes = SubsequentPizzaTimeSavingsInMinutes;
         }
         
         _previousRecipeType = recipe.RecipeType;
