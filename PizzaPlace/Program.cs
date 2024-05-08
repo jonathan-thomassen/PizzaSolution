@@ -1,7 +1,8 @@
-using PizzaPlace;
 using PizzaPlace.Factories;
 using PizzaPlace.Repositories;
 using PizzaPlace.Services;
+using Microsoft.EntityFrameworkCore;
+using PizzaPlace.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,9 @@ builder.Services.AddOpenApiDocument(d =>
     d.Version = "v1";
 });
 
+builder.Services.AddDbContext<StockDtoDBContext>();
+builder.Services.AddDbContext<RecipeDtoDBContext>();
+
 // Register services:
 var services = builder.Services;
 services.AddSingleton(TimeProvider.System);
@@ -41,6 +45,7 @@ services.AddTransient<IStockService, StockService>();
 services.AddTransient<IRecipeService, RecipeService>();
 services.AddTransient<IOrderingService, OrderingService>();
 services.AddTransient<IMenuService, MenuService>();
+
 
 var app = builder.Build();
 
