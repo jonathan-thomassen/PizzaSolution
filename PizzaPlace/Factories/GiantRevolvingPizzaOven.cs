@@ -10,10 +10,31 @@ public class GiantRevolvingPizzaOven(TimeProvider timeProvider) : PizzaOven(time
 {
     private const int GiantRevolvingPizzaOvenCapacity = 120;
 
+    private int? _previousCookingTime = null;
+
     protected override int Capacity => GiantRevolvingPizzaOvenCapacity;
 
     protected override void PlanPizzaMaking(IEnumerable<(PizzaRecipeDto Recipe, Guid Guid)> recipeOrders)
     {
-        throw new NotImplementedException();
+        foreach (var (recipe, orderGuid) in recipeOrders)
+        {
+            _pizzaQueue.Enqueue((MakePizza(recipe), orderGuid));
+        }
     }
+
+    private Func<Task<Pizza?>> MakePizza(PizzaRecipeDto recipe) => async () =>
+    {
+        if (_previousCookingTime == null || recipe.CookingTimeMinutes == _previousCookingTime)
+        {
+            _previousCookingTime = recipe.CookingTimeMinutes;
+            await CookPizza(recipe.CookingTimeMinutes);
+        }
+        else
+        {
+            await CookPizza((int)_previousCookingTime);
+            await CookPizza(recipe.CookingTimeMinutes);
+        }
+
+        return GetPizza(recipe.RecipeType);
+    };
 }

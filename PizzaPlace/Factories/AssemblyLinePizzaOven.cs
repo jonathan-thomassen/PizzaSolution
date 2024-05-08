@@ -1,4 +1,6 @@
 ﻿using PizzaPlace.Models;
+using PizzaPlace.Models.Types;
+using PizzaPlace.Pizzas;
 
 namespace PizzaPlace.Factories;
 
@@ -13,10 +15,43 @@ public class AssemblyLinePizzaOven(TimeProvider timeProvider) : PizzaOven(timePr
     public const int SubsequentPizzaTimeSavingsInMinutes = 5;
     public const int MinimumCookingTimeMinutes = 4;
 
+    private PizzaRecipeType? _previousRecipeType = null;
+    private bool _ovenReady = false;
+
     protected override int Capacity => AssemblyLineCapacity;
 
     protected override void PlanPizzaMaking(IEnumerable<(PizzaRecipeDto Recipe, Guid Guid)> recipeOrders)
     {
-        throw new NotImplementedException();
+        foreach (var (recipe, orderGuid) in recipeOrders)
+        {
+            _pizzaQueue.Enqueue((MakePizza(recipe), orderGuid));
+        }
     }
+
+    private Func<Task<Pizza?>> MakePizza(PizzaRecipeDto recipe) => async () =>
+    {
+        if (!_ovenReady)
+        {
+            _previousRecipeType = null;
+            await Task.Delay(TimeSpan.FromMinutes(SetupTimeMinutes), timeProvider);
+            _ovenReady = true;
+        }
+
+        if (recipe.RecipeType == _previousRecipeType)
+        {
+            var cookingTimeMinutes = recipe.CookingTimeMinutes - SubsequentPizzaTimeSavingsInMinutes;
+            if (cookingTimeMinutes < MinimumCookingTimeMinutes)
+            {
+                cookingTimeMinutes = MinimumCookingTimeMinutes;
+            }
+            await CookPizza(cookingTimeMinutes);
+        } else
+        {
+            await CookPizza(recipe.CookingTimeMinutes);
+        }
+        
+        _previousRecipeType = recipe.RecipeType;
+
+        return GetPizza(recipe.RecipeType);
+    };
 }

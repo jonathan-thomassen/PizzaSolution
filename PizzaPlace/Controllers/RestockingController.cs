@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PizzaPlace.Models;
 using PizzaPlace.Repositories;
-using PizzaPlace.Services;
 
 namespace PizzaPlace.Controllers;
 
