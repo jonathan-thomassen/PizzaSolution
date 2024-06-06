@@ -59,18 +59,18 @@ public class NormalPizzaOvenTests
         var timeProvider = new FakeTimeProvider();
         var order = new ComparableList<PizzaPrepareOrder>
         {
-            new PizzaPrepareOrder(GetTestStandardPizzaRecipe(), 2),
-            new PizzaPrepareOrder(GetTestTastyPizzaRecipe(), 3)
+            new(GetTestStandardPizzaRecipe(), 2),
+            new(GetTestTastyPizzaRecipe(), 3)
         };
         var stock = new ComparableList<StockDto>
         {
-            new StockDto(StockType.Dough, 10),
-            new StockDto(StockType.Tomatoes, 20),
-            new StockDto(StockType.GratedCheese, 10),
-            new StockDto(StockType.GenericSpices, 10),
-            new StockDto(StockType.FermentedDough, 3),
-            new StockDto(StockType.RottenTomatoes, 10),
-            new StockDto(StockType.Bacon, 3),
+            new(StockType.Dough, 10),
+            new(StockType.Tomatoes, 20),
+            new(StockType.GratedCheese, 10),
+            new(StockType.GenericSpices, 10),
+            new(StockType.FermentedDough, 3),
+            new(StockType.RottenTomatoes, 10),
+            new(StockType.Bacon, 3)
         };
 
         var oven = GetOven(timeProvider);

@@ -8,18 +8,18 @@ namespace PizzaPlace.Test.Repositories;
 [TestClass]
 public class StockRepositoryTests
 {
-    private static IStockRepository GetStockRepository() => new StockRepository();
+    private static StockRepository GetStockRepository() => new();
 
     [TestMethod]
     public async Task AddToStock()
     {
         // Arrange
-        var addedAmount = 10;
-        var stock = new StockDto(StockType.TrippleBacon, addedAmount);
-        var repository = GetStockRepository();
+        int addedAmount = 10;
+        StockDto stock = new StockDto(StockType.TrippleBacon, addedAmount);
+        StockRepository repository = GetStockRepository();
 
         // Act
-        var actual = await repository.AddToStock(stock);
+        StockDto actual = await repository.AddToStock(stock);
 
         // Assert
         Assert.IsTrue(actual.Amount >= addedAmount);
