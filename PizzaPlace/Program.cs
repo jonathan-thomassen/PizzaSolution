@@ -22,11 +22,9 @@ services.AddCors(o =>
 });
 
 services.AddControllers();
-services.AddOpenApiDocument(d =>
-{
-    d.Title = "Pizza Place";
-    d.Version = "v1";
-});
+
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
 
 services.AddDbContext<StockDtoDBContext>();
 services.AddDbContext<RecipeDtoDBContext>();
@@ -47,12 +45,14 @@ services.AddTransient<IMenuService, MenuService>();
 
 WebApplication app = builder.Build();
 
-app.UseOpenApi();
-app.UseSwaggerUi();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 app.UseDeveloperExceptionPage();
 
 app.UseCors();
 
 app.MapControllers();
-
 app.Run();
