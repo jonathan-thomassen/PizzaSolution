@@ -1,56 +1,58 @@
 ﻿using PizzaPlace.Models;
 using PizzaPlace.Repositories;
 
-namespace PizzaPlace.Services;
-
-public class StockService(IStockRepository stockRepository) : IStockService
+namespace PizzaPlace.Services
 {
-    public async Task<bool> HasInsufficientStock(PizzaOrder order, ComparableList<PizzaRecipeDto> recipeDtos)
+    public class StockService(IStockRepository stockRepository) : IStockService
     {
-        foreach (var pizza in order.RequestedOrder)
+        public async Task<bool> HasInsufficientStock(
+            PizzaOrder order, ComparableList<PizzaRecipeDto> recipeDtos)
         {
-            foreach (var recipe in recipeDtos)
+            foreach (PizzaAmount pizza in order.RequestedOrder)
             {
-                if (pizza.PizzaType == recipe.RecipeType)
+                foreach (PizzaRecipeDto recipe in recipeDtos)
                 {
-                    foreach (var ingredient in recipe.Ingredients)
+                    if (pizza.PizzaType == recipe.RecipeType)
                     {
-                        var stockDto = await stockRepository.GetStock(ingredient.StockType);
-                        if (stockDto == null || stockDto.Amount < ingredient.Amount)
+                        foreach (StockDto ingredient in recipe.Ingredients)
                         {
-                            return true;
+                            StockDto stockDto = await stockRepository.GetStock(ingredient.StockType);
+                            if (stockDto == null || stockDto.Amount < ingredient.Amount)
+                            {
+                                return true;
+                            }
                         }
                     }
                 }
             }
+
+            return false;
         }
 
-        return false;
-    }
-
-    public async Task<ComparableList<StockDto>> GetStock(PizzaOrder order, ComparableList<PizzaRecipeDto> recipeDtos)
-    {
-        var returnList = new ComparableList<StockDto>();
-
-        foreach (var pizza in order.RequestedOrder)
+        public async Task<ComparableList<StockDto>> GetStock(PizzaOrder order, ComparableList<PizzaRecipeDto> recipeDtos)
         {
-            foreach (var recipe in recipeDtos)
-            {
-                if (pizza.PizzaType == recipe.RecipeType)
-                {
-                    foreach (var ingredient in recipe.Ingredients)
-                    {
-                        var stockDto = await stockRepository.GetStock(ingredient.StockType);
+            var returnList = new ComparableList<StockDto>();
 
-                        if (stockDto != null)
+            foreach (var pizza in order.RequestedOrder)
+            {
+                foreach (var recipe in recipeDtos)
+                {
+                    if (pizza.PizzaType == recipe.RecipeType)
+                    {
+                        foreach (var ingredient in recipe.Ingredients)
                         {
-                            returnList.Add(stockDto);
+                            var stockDto = await stockRepository.GetStock(ingredient.StockType);
+
+                            if (stockDto != null)
+                            {
+                                returnList.Add(stockDto);
+                            }
                         }
                     }
                 }
             }
-        }
 
-        return returnList;
+            return returnList;
+        }
     }
 }

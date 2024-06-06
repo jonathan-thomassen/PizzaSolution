@@ -1,12 +1,13 @@
 using PizzaPlace.Factories;
 using PizzaPlace.Repositories;
 using PizzaPlace.Services;
-using Microsoft.EntityFrameworkCore;
 using PizzaPlace.Models;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddCors(o =>
+IServiceCollection services = builder.Services;
+
+services.AddCors(o =>
 {
     o.AddPolicy("allowAll",
         policy =>
@@ -20,22 +21,20 @@ builder.Services.AddCors(o =>
         });
 });
 
-builder.Services.AddControllers();
-builder.Services.AddOpenApiDocument(d =>
+services.AddControllers();
+services.AddOpenApiDocument(d =>
 {
     d.Title = "Pizza Place";
     d.Version = "v1";
 });
 
-builder.Services.AddDbContext<StockDtoDBContext>();
-builder.Services.AddDbContext<RecipeDtoDBContext>();
+services.AddDbContext<StockDtoDBContext>();
+services.AddDbContext<RecipeDtoDBContext>();
 
-// Register services:
-var services = builder.Services;
 services.AddSingleton(TimeProvider.System);
 
 services.AddTransient<IStockRepository, FakeStockRepository>();
-services.AddTransient<IRecipeRepository, FakeRecipeRepository>();
+services.AddTransient<IRecipeRepository, RecipeRepository>();
 
 services.AddTransient<IPizzaOven, NormalPizzaOven>();
 services.AddTransient<IPizzaOven, AssemblyLinePizzaOven>();
@@ -47,7 +46,7 @@ services.AddTransient<IOrderingService, OrderingService>();
 services.AddTransient<IMenuService, MenuService>();
 
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 app.UseOpenApi();
 app.UseSwaggerUi();

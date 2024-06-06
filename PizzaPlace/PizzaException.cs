@@ -1,16 +1,19 @@
-﻿namespace PizzaPlace;
-
-public class PizzaException : Exception
+﻿namespace PizzaPlace
 {
-    public PizzaException()
-    {
-    }
 
-    public PizzaException(string? message) : base(message)
+    public class PizzaException : Exception
     {
-    }
+        public PizzaException()
+        {
+        }
 
-    public PizzaException(string? message, Exception? innerException) : base(message, innerException)
-    {
+        public PizzaException(string? message) : base(message)
+        {
+        }
+
+        public PizzaException(string? message, Exception? innerException)
+            : base(message, innerException)
+        {
+        }
     }
 }

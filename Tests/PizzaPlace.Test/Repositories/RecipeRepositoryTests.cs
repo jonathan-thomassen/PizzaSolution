@@ -7,7 +7,7 @@ namespace PizzaPlace.Test.Repositories;
 [TestClass]
 public class RecipeRepositoryTests
 {
-    private static IRecipeRepository GetRecipeRepository() => new FakeRecipeRepository();
+    private static FakeRecipeRepository GetRecipeRepository() => new();
 
     private static ComparableList<StockDto> GetStandardIngredients() =>
     [
@@ -25,7 +25,9 @@ public class RecipeRepositoryTests
         if (StandardRecipeId > 0)
             return;
 
-        var recipe = new PizzaRecipeDto(PizzaRecipeType.StandardPizza, GetStandardIngredients(), StandardCookingTime);
+        var recipe = new PizzaRecipeDto(PizzaRecipeType.StandardPizza,
+                                        GetStandardIngredients(),
+                                        StandardCookingTime);
         var repository = GetRecipeRepository();
 
         // Act

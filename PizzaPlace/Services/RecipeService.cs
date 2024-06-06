@@ -5,7 +5,8 @@ namespace PizzaPlace.Services;
 
 public class RecipeService(IRecipeRepository recipeRepository) : IRecipeService
 {
-    public async Task<ComparableList<PizzaRecipeDto>> GetPizzaRecipes(PizzaOrder order)
+    public async Task<ComparableList<PizzaRecipeDto>>
+        GetPizzaRecipes(PizzaOrder order)
     {
         var pizzaTypes = order.RequestedOrder
             .Select(x => x.PizzaType)
