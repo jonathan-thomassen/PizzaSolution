@@ -1,4 +1,5 @@
-﻿using PizzaPlace.Models;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PizzaPlace.Models;
 using PizzaPlace.Models.Types;
 using PizzaPlace.Repositories;
 
@@ -7,7 +8,7 @@ namespace PizzaPlace.Test.Repositories;
 [TestClass]
 public class RecipeRepositoryTests
 {
-    private static FakeRecipeRepository GetRecipeRepository() => new();
+    private static RecipeRepository GetRecipeRepository() => new();
 
     private static ComparableList<StockDto> GetStandardIngredients() =>
     [

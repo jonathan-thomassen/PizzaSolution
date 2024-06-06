@@ -1,14 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PizzaPlace.Services;
 
-namespace PizzaPlace.Controllers;
-
-[Route("api/menu")]
-public class MenuController(TimeProvider timeProvider, IMenuService menuService) : ControllerBase
+namespace PizzaPlace.Controllers
 {
-    [HttpGet]
-    public async Task<IActionResult> GetMenu()
+    [Route("api/menu")]
+    public class MenuController(
+        TimeProvider timeProvider, IMenuService menuService) : ControllerBase
     {
-        return Ok(await menuService.GetMenu(timeProvider.GetUtcNow()));
+        [HttpGet]
+        public async Task<IActionResult> GetMenu()
+        {
+            return Ok(await menuService.GetMenu(timeProvider.GetUtcNow()));
+        }
     }
 }

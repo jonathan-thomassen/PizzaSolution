@@ -1,7 +1,8 @@
-﻿namespace PizzaPlace;
-
-public static class EnumerableExtension
+﻿namespace PizzaPlace
 {
-    public static ComparableList<T> ToComparableList<T>(this IEnumerable<T> values) =>
-        new(values);
+    public static class EnumerableExtension
+    {
+        public static ComparableList<T> ToComparableList<T>(this IEnumerable<T> values) =>
+            new(values);
+    }
 }

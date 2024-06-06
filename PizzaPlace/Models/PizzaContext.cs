@@ -4,14 +4,9 @@ namespace PizzaPlace.Models
 {
     public partial class PizzaContext : DbContext
     {
-        public PizzaContext()
-        {
-        }
+        public PizzaContext() { }
 
-        public PizzaContext(DbContextOptions<PizzaContext> options)
-            : base(options)
-        {
-        }
+        public PizzaContext(DbContextOptions<PizzaContext> options) : base(options) { }
 
         public virtual DbSet<PizzaRecipeDto> Recipes { get; set; }
         public virtual DbSet<StockDto> Stock { get; set; }
@@ -20,7 +15,15 @@ namespace PizzaPlace.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
+                optionsBuilder.UseSqlServer(
+                    "Data Source=(localdb)\\MSSQLLocalDB;" +
+                    "Initial Catalog=master;" +
+                    "Integrated Security=True;" +
+                    "Connect Timeout=30;" +
+                    "Encrypt=False;" +
+                    "Trust Server Certificate=False;" +
+                    "Application Intent=ReadWrite;" +
+                    "Multi Subnet Failover=False");
             }
         }
 
@@ -32,28 +35,18 @@ namespace PizzaPlace.Models
             {
                 entity.HasKey(e => e.Id);
 
-                entity.Property(e => e.Id)
-                    .IsRequired();
-
-                entity.Property(e => e.CookingTimeMinutes)
-                    .IsRequired();
-
-                entity.Property(e => e.RecipeType)
-                    .IsRequired();
+                entity.Property(e => e.Id).IsRequired();
+                entity.Property(e => e.CookingTimeMinutes).IsRequired();
+                entity.Property(e => e.RecipeType).IsRequired();
             });
 
             modelBuilder.Entity<StockDto>(entity =>
             {
                 entity.HasKey(e => e.Id);
 
-                entity.Property(e => e.Id)
-                    .IsRequired();
-
-                entity.Property(e => e.StockType)
-                    .IsRequired();
-
-                entity.Property(e => e.Amount)
-                    .IsRequired();
+                entity.Property(e => e.Id).IsRequired();
+                entity.Property(e => e.StockType).IsRequired();
+                entity.Property(e => e.Amount).IsRequired();
             });
 
             OnModelCreatingPartial(modelBuilder);

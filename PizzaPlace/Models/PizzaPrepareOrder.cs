@@ -1,3 +1,4 @@
-﻿namespace PizzaPlace.Models;
-
-public record PizzaPrepareOrder(PizzaRecipeDto RecipeDto, int OrderAmount);
+﻿namespace PizzaPlace.Models
+{
+    public record PizzaPrepareOrder(PizzaRecipeDto RecipeDto, int OrderAmount);
+}

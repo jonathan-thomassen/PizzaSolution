@@ -1,4 +1,6 @@
-﻿using PizzaPlace.Factories;
+﻿using Microsoft.Extensions.Time.Testing;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PizzaPlace.Factories;
 using PizzaPlace.Models;
 using PizzaPlace.Pizzas;
 using PizzaPlace.Test.TestExtensions;
@@ -14,11 +16,11 @@ public class AssemblyLinePizzaOvenTests
     public async Task PreparePizzas_OnePizza()
     {
         // Arrange
-        var timeProvider = new FakeTimeProvider();
-        var order = new ComparableList<PizzaPrepareOrder>
-         {
-             new PizzaPrepareOrder(NormalPizzaOvenTests.GetTestStandardPizzaRecipe(), 1),
-         };
+        FakeTimeProvider timeProvider = new();
+        ComparableList<PizzaPrepareOrder> order =
+        [
+            new PizzaPrepareOrder(NormalPizzaOvenTests.GetTestStandardPizzaRecipe(), 1),
+        ];
         var stock = NormalPizzaOvenTests.GetPlentyStock();
 
         var oven = GetOven(timeProvider);

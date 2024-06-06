@@ -33,7 +33,7 @@ services.AddDbContext<RecipeDtoDBContext>();
 
 services.AddSingleton(TimeProvider.System);
 
-services.AddTransient<IStockRepository, FakeStockRepository>();
+services.AddTransient<IStockRepository, StockRepository>();
 services.AddTransient<IRecipeRepository, RecipeRepository>();
 
 services.AddTransient<IPizzaOven, NormalPizzaOven>();
@@ -44,7 +44,6 @@ services.AddTransient<IStockService, StockService>();
 services.AddTransient<IRecipeService, RecipeService>();
 services.AddTransient<IOrderingService, OrderingService>();
 services.AddTransient<IMenuService, MenuService>();
-
 
 WebApplication app = builder.Build();
 

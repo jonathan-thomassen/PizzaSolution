@@ -1,10 +1,11 @@
 ﻿using PizzaPlace.Models.Types;
 
-namespace PizzaPlace.Pizzas;
-
-public record ExtremelyTastyPizza : Pizza
+namespace PizzaPlace.Pizzas
 {
-    public ExtremelyTastyPizza() : base(PizzaRecipeType.ExtremelyTastyPizza)
+    public record ExtremelyTastyPizza : Pizza
     {
+        public ExtremelyTastyPizza() : base(PizzaRecipeType.ExtremelyTastyPizza)
+        {
+        }
     }
 }

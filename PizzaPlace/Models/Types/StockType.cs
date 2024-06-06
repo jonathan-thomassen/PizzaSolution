@@ -1,23 +1,26 @@
-﻿namespace PizzaPlace.Models.Types;
+﻿using System.Text.Json.Serialization;
 
-[JsonConverter(typeof(JsonStringEnumConverter))]
-public enum StockType
+namespace PizzaPlace.Models.Types
 {
-    Dough,
-    FermentedDough,
-    Tomatoes,
-    RottenTomatoes,
-    UnicornDust,
-    Anchovies,
-    BellPeppers,
-    GratedCheese,
-    UngratedCheese,
-    GenericSpices,
-    UngenericSpices,
-    Sulphur,
-    Bacon,
-    DoubleBacon,
-    TrippleBacon,
-    RayOfSunshine,
-    Chocolate
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public enum StockType
+    {
+        Dough,
+        FermentedDough,
+        Tomatoes,
+        RottenTomatoes,
+        UnicornDust,
+        Anchovies,
+        BellPeppers,
+        GratedCheese,
+        UngratedCheese,
+        GenericSpices,
+        UngenericSpices,
+        Sulphur,
+        Bacon,
+        DoubleBacon,
+        TrippleBacon,
+        RayOfSunshine,
+        Chocolate
+    }
 }

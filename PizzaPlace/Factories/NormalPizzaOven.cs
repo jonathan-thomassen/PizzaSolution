@@ -1,29 +1,31 @@
 ﻿using PizzaPlace.Models;
 using PizzaPlace.Pizzas;
 
-namespace PizzaPlace.Factories;
-
-/// <summary>
-/// A normal oven producing each pizza one at a time. Each pizza taking the normal cooking time.
-/// </summary>
-public class NormalPizzaOven(TimeProvider timeProvider) : PizzaOven(timeProvider)
+namespace PizzaPlace.Factories
 {
-    private const int NormalPizzaOvenCapacity = 4;
-
-    protected override int Capacity => NormalPizzaOvenCapacity;
-
-    protected override void PlanPizzaMaking(IEnumerable<(PizzaRecipeDto Recipe, Guid Guid)> recipeOrders)
+    /// <summary>
+    /// A normal oven producing each pizza one at a time. Each pizza taking the normal cooking time.
+    /// </summary>
+    public class NormalPizzaOven(TimeProvider timeProvider) : PizzaOven(timeProvider)
     {
-        foreach (var (recipe, orderGuid) in recipeOrders)
+        private const int NormalPizzaOvenCapacity = 4;
+
+        protected override int Capacity => NormalPizzaOvenCapacity;
+
+        protected override void PlanPizzaMaking(
+            IEnumerable<(PizzaRecipeDto Recipe, Guid Guid)> recipeOrders)
         {
-            _pizzaQueue.Enqueue((MakePizza(recipe), orderGuid));
+            foreach ((PizzaRecipeDto recipe, Guid orderGuid) in recipeOrders)
+            {
+                _pizzaQueue.Enqueue((MakePizza(recipe), orderGuid));
+            }
         }
+
+        private Func<Task<Pizza?>> MakePizza(PizzaRecipeDto recipe) => async () =>
+        {
+            await CookPizza(recipe.CookingTimeMinutes);
+
+            return GetPizza(recipe.RecipeType);
+        };
     }
-
-    private Func<Task<Pizza?>> MakePizza(PizzaRecipeDto recipe) => async () =>
-    {
-        await CookPizza(recipe.CookingTimeMinutes);
-
-        return GetPizza(recipe.RecipeType);
-    };
 }

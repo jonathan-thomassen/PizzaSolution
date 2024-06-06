@@ -1,4 +1,6 @@
-﻿namespace PizzaPlace.Services;
+﻿using PizzaPlace.Models.Types;
+
+namespace PizzaPlace.Services;
 
 public class MenuService : IMenuService
 {
@@ -6,17 +8,13 @@ public class MenuService : IMenuService
     {
         ComparableList<MenuItem> itemsLunch =
         [
-            new("Lunch Pizza",
-                Models.Types.PizzaRecipeType.HorseRadishPizza,
-                12.5)
+            new("Lunch Pizza", PizzaRecipeType.HorseRadishPizza, 12.5)
         ];
         var menuLunch = new Menu("It's lunch, boy", itemsLunch);
 
         ComparableList<MenuItem> itemsNotLunch =
         [
-            new("Non-Lunch Pizza",
-                Models.Types.PizzaRecipeType.StandardPizza,
-                18.0)
+            new("Non-Lunch Pizza", PizzaRecipeType.StandardPizza, 18.0)
         ];
 
         var menuNotLunch = new Menu("It ain't lunch, boy", itemsNotLunch);

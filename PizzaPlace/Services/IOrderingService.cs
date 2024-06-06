@@ -1,9 +1,10 @@
 ﻿using PizzaPlace.Models;
 using PizzaPlace.Pizzas;
 
-namespace PizzaPlace.Services;
-
-public interface IOrderingService
+namespace PizzaPlace.Services
 {
-    Task<IEnumerable<Pizza>> HandlePizzaOrder(PizzaOrder order);
+    public interface IOrderingService
+    {
+        Task<IEnumerable<Pizza>> HandlePizzaOrder(PizzaOrder order);
+    }
 }

@@ -1,38 +1,40 @@
 ﻿using PizzaPlace.Models;
+using PizzaPlace.Models.Types;
 using PizzaPlace.Repositories;
 
-namespace PizzaPlace.Services;
-
-public class RecipeService(IRecipeRepository recipeRepository) : IRecipeService
+namespace PizzaPlace.Services
 {
-    public async Task<ComparableList<PizzaRecipeDto>>
-        GetPizzaRecipes(PizzaOrder order)
+    public class RecipeService(IRecipeRepository recipeRepository) : IRecipeService
     {
-        var pizzaTypes = order.RequestedOrder
-            .Select(x => x.PizzaType)
-            .Distinct()
-            .ToList();
-
-        ComparableList<PizzaRecipeDto> recipes = [];
-        foreach (var pizzaType in pizzaTypes)
+        public async Task<ComparableList<PizzaRecipeDto>> GetPizzaRecipes(PizzaOrder order)
         {
-            recipes.Add(await recipeRepository.GetRecipe(pizzaType));
+            List<PizzaRecipeType> pizzaTypes = order.RequestedOrder
+                .Select(x => x.PizzaType)
+                .Distinct()
+                .ToList();
+
+            ComparableList<PizzaRecipeDto> recipes = [];
+            foreach (PizzaRecipeType pizzaType in pizzaTypes)
+            {
+                recipes.Add(await recipeRepository.GetRecipe(pizzaType));
+            }
+
+            return recipes;
         }
 
-        return recipes;
-    }
+        public async Task<long> AddPizzaRecipe(PizzaRecipeDto recipe)
+        {
+            long result = await recipeRepository.AddRecipe(recipe);
 
-    public async Task<long> AddPizzaRecipe(PizzaRecipeDto recipe)
-    {
-        var result = await recipeRepository.AddRecipe(recipe);
+            return result;
+        }
 
-        return result;
-    }
+        public async Task<long> UpdatePizzaRecipe(
+            PizzaRecipeDto recipe, long id)
+        {
+            long result = await recipeRepository.UpdateRecipe(recipe, id);
 
-    public async Task<long> UpdatePizzaRecipe(PizzaRecipeDto recipe, long id)
-    {
-        var result = await recipeRepository.UpdateRecipe(recipe, id);
-
-        return result;
+            return result;
+        }
     }
 }

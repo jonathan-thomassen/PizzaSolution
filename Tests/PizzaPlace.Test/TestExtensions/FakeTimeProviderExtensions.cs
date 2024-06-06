@@ -1,12 +1,16 @@
-﻿namespace PizzaPlace.Test.TestExtensions;
+﻿using Microsoft.Extensions.Time.Testing;
 
-public static class FakeTimeProviderExtensions
+namespace PizzaPlace.Test.TestExtensions
 {
-    public static void PassTimeInMinuteIntervals(this FakeTimeProvider fakeTimeProvider, int minutesToPass)
+    public static class FakeTimeProviderExtensions
     {
-        while (minutesToPass-- > 0)
+        public static void PassTimeInMinuteIntervals(
+            this FakeTimeProvider fakeTimeProvider, int minutesToPass)
         {
-            fakeTimeProvider.Advance(TimeSpan.FromMinutes(1));
+            while (minutesToPass-- > 0)
+            {
+                fakeTimeProvider.Advance(TimeSpan.FromMinutes(1));
+            }
         }
     }
 }

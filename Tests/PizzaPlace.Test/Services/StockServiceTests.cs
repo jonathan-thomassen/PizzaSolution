@@ -1,56 +1,67 @@
-﻿using PizzaPlace.Models;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using PizzaPlace.Models;
 using PizzaPlace.Repositories;
 using PizzaPlace.Services;
 
-namespace PizzaPlace.Test.Services;
-
-[TestClass]
-public class StockServiceTests
+namespace PizzaPlace.Test.Services
 {
-    private static StockService GetService(Mock<IStockRepository> stockRepository) =>
-        new(stockRepository.Object);
-
-    [TestMethod]
-    public async Task HasInsufficientStock()
+    [TestClass]
+    public class StockServiceTests
     {
-        // Arrange
-        var pAmount = new PizzaAmount(Models.Types.PizzaRecipeType.StandardPizza, 2);
-        var order = new PizzaOrder(new ComparableList<PizzaAmount>() { pAmount });
+        private static StockService GetService(
+            Mock<IStockRepository> stockRepository) => new(stockRepository.Object);
 
-        var recipeDto = new PizzaRecipeDto(Models.Types.PizzaRecipeType.StandardPizza, new ComparableList<StockDto>() { new StockDto(Models.Types.StockType.Dough, 1), new StockDto(Models.Types.StockType.Tomatoes, 1) }, 12);
+        [TestMethod]
+        public async Task HasInsufficientStock()
+        {
+            // Arrange
+            PizzaAmount pAmount = new(Models.Types.PizzaRecipeType.StandardPizza, 2);
+            PizzaOrder order = new([pAmount]);
 
-        bool expected = true;
+            PizzaRecipeDto recipeDto = new(
+                Models.Types.PizzaRecipeType.StandardPizza,
+                [new StockDto(Models.Types.StockType.Dough, 1),
+                    new StockDto(Models.Types.StockType.Tomatoes, 1)],
+                12);
 
-        var stockRepository = new Mock<IStockRepository>();
+            bool expected = true;
 
-        var service = GetService(stockRepository);
+            Mock<IStockRepository> stockRepository = new();
 
-        // Act
-        var actual = await service.HasInsufficientStock(order, new ComparableList<PizzaRecipeDto>() { recipeDto });
+            StockService service = GetService(stockRepository);
 
-        // Assert
-        Assert.AreEqual(expected, actual);
-    }
+            // Act
+            bool actual = await service.HasInsufficientStock(order, [recipeDto]);
 
-    [TestMethod]
-    public async Task GetStock()
-    {
-        // Arrange
-        var pAmount = new PizzaAmount(Models.Types.PizzaRecipeType.StandardPizza, 2);
-        var order = new PizzaOrder(new ComparableList<PizzaAmount>() { pAmount });
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
 
-        var recipeDto = new PizzaRecipeDto(Models.Types.PizzaRecipeType.StandardPizza, new ComparableList<StockDto>() { new StockDto(Models.Types.StockType.Dough, 1), new StockDto(Models.Types.StockType.Tomatoes, 1) }, 12);
+        [TestMethod]
+        public async Task GetStock()
+        {
+            // Arrange
+            PizzaAmount pAmount = new(Models.Types.PizzaRecipeType.StandardPizza, 2);
+            PizzaOrder order = new([pAmount]);
 
-        ComparableList<StockDto> expected = [];
+            PizzaRecipeDto recipeDto = new(
+                Models.Types.PizzaRecipeType.StandardPizza,
+                [new StockDto(Models.Types.StockType.Dough, 1),
+                    new StockDto(Models.Types.StockType.Tomatoes, 1)],
+                12);
 
-        var stockRepository = new Mock<IStockRepository>();
+            ComparableList<StockDto> expected = [];
 
-        var service = GetService(stockRepository);
+            Mock<IStockRepository> stockRepository = new();
 
-        // Act
-        var actual = await service.GetStock(order, new ComparableList<PizzaRecipeDto>() { recipeDto });
+            StockService service = GetService(stockRepository);
 
-        // Assert
-        Assert.AreEqual(expected, actual);
+            // Act
+            ComparableList<StockDto> actual = await service.GetStock(order, [recipeDto]);
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

@@ -1,12 +1,15 @@
-﻿namespace PizzaPlace.Models.Types;
+﻿using System.Text.Json.Serialization;
 
-[JsonConverter(typeof(JsonStringEnumConverter))]
-public enum PizzaRecipeType
+namespace PizzaPlace.Models.Types
 {
-    StandardPizza,
-    ExtremelyTastyPizza,
-    OddPizza,
-    RarePizza,
-    HorseRadishPizza,
-    EmptyPizza,
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public enum PizzaRecipeType
+    {
+        StandardPizza,
+        ExtremelyTastyPizza,
+        OddPizza,
+        RarePizza,
+        HorseRadishPizza,
+        EmptyPizza,
+    }
 }

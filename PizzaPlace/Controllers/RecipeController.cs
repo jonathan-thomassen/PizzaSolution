@@ -2,20 +2,21 @@
 using PizzaPlace.Models;
 using PizzaPlace.Services;
 
-namespace PizzaPlace.Controllers;
-
-[Route("api/recipe")]
-public class RecipeController(IRecipeService recipeService) : ControllerBase
+namespace PizzaPlace.Controllers
 {
-    [HttpPost]
-    public async Task<IActionResult> AddRecipe([FromBody] PizzaRecipeDto recipe)
+    [Route("api/recipe")]
+    public class RecipeController(IRecipeService recipeService) : ControllerBase
     {
-        return Ok(await recipeService.AddPizzaRecipe(recipe));
-    }
+        [HttpPost]
+        public async Task<IActionResult> AddRecipe([FromBody] PizzaRecipeDto recipe)
+        {
+            return Ok(await recipeService.AddPizzaRecipe(recipe));
+        }
 
-    [HttpPut]
-    public async Task<IActionResult> UpdateRecipe([FromBody] PizzaRecipeDto recipe, long id)
-    {
-        return Ok(await recipeService.UpdatePizzaRecipe(recipe, id));
+        [HttpPut]
+        public async Task<IActionResult> UpdateRecipe([FromBody] PizzaRecipeDto recipe, long id)
+        {
+            return Ok(await recipeService.UpdatePizzaRecipe(recipe, id));
+        }
     }
 }

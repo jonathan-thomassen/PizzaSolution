@@ -1,6 +1,7 @@
-﻿namespace PizzaPlace.Services;
-
-public interface IMenuService
+﻿namespace PizzaPlace.Services
 {
-    Task<Menu> GetMenu(DateTimeOffset menuDate);
+    public interface IMenuService
+    {
+        Task<Menu> GetMenu(DateTimeOffset menuDate);
+    }
 }

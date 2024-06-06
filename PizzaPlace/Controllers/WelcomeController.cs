@@ -1,15 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace PizzaPlace.Controllers;
-
-[Route("api/welcome")]
-public class WelcomeController : ControllerBase
+namespace PizzaPlace.Controllers
 {
-    [HttpGet]
-    public IActionResult Greet()
+    [Route("api/welcome")]
+    public class WelcomeController : ControllerBase
     {
-        Console.WriteLine("Greeted guest. Woohoo!");
+        [HttpGet]
+        public IActionResult Greet()
+        {
+            Console.WriteLine("Greeted guest. Woohoo!");
 
-        return Ok("Welcome to this automated pizza place.");
+            return Ok("Welcome to this automated pizza place.");
+        }
     }
 }

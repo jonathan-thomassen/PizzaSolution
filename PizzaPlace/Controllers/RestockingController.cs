@@ -2,19 +2,20 @@
 using PizzaPlace.Models;
 using PizzaPlace.Repositories;
 
-namespace PizzaPlace.Controllers;
-
-[Route("api/restocking")]
-public class RestockingController(IStockRepository stockRepository) : ControllerBase
+namespace PizzaPlace.Controllers
 {
-    [HttpPost]
-    public async Task<IActionResult> Restock([FromBody] ComparableList<StockDto> stock)
+    [Route("api/restocking")]
+    public class RestockingController(IStockRepository stockRepository) : ControllerBase
     {
-        foreach (var item in stock)
+        [HttpPost]
+        public async Task<IActionResult> Restock([FromBody] ComparableList<StockDto> stock)
         {
-            await stockRepository.AddToStock(item);
-        }
+            foreach (StockDto item in stock)
+            {
+                await stockRepository.AddToStock(item);
+            }
 
-        return Ok();
+            return Ok();
+        }
     }
 }

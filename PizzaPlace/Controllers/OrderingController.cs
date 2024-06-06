@@ -2,18 +2,18 @@
 using PizzaPlace.Models;
 using PizzaPlace.Services;
 
-namespace PizzaPlace.Controllers;
-
-[Route("api/order")]
-public class OrderingController(
-    IOrderingService orderingService) : ControllerBase
+namespace PizzaPlace.Controllers
 {
-    [HttpPost]
-    public async Task<IActionResult> PlacePizzaOrder([FromBody] PizzaOrder pizzaOrder)
+    [Route("api/order")]
+    public class OrderingController(IOrderingService orderingService) : ControllerBase
     {
-        return Ok(new
+        [HttpPost]
+        public async Task<IActionResult> PlacePizzaOrder([FromBody] PizzaOrder pizzaOrder)
         {
-            pizzas = await orderingService.HandlePizzaOrder(pizzaOrder),
-        });
+            return Ok(new
+            {
+                pizzas = await orderingService.HandlePizzaOrder(pizzaOrder),
+            });
+        }
     }
 }

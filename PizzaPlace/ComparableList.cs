@@ -1,6 +1,8 @@
-﻿namespace PizzaPlace
-{
+﻿using System.Collections;
+using System.Text.Json;
 
+namespace PizzaPlace
+{
     /// <summary>
     /// Just a list with equals to match if all items match.
     /// </summary>
@@ -22,15 +24,12 @@
         public override bool Equals(object? obj) =>
             obj is ComparableList<T> otherList &&
             Count == otherList.Count &&
-            _list.Zip(otherList)
-            .All(x => x.First?.Equals(x.Second) ?? x.Second is null);
+            _list.Zip(otherList).All(x => x.First?.Equals(x.Second) ?? x.Second is null);
 
         public override int GetHashCode() =>
-            _list.Aggregate(
-                0, (hash, item) => HashCode.Combine(hash, item?.GetHashCode()));
+            _list.Aggregate(0, (hash, item) => HashCode.Combine(hash, item?.GetHashCode()));
 
-        public override string ToString() =>
-            JsonSerializer.Serialize(this);
+        public override string ToString() => JsonSerializer.Serialize(this);
 
         // IList implementation through _list
 
@@ -50,8 +49,7 @@
 
         public bool Contains(T item) => _list.Contains(item);
 
-        public void CopyTo(T[] array, int arrayIndex) =>
-            _list.CopyTo(array, arrayIndex);
+        public void CopyTo(T[] array, int arrayIndex) => _list.CopyTo(array, arrayIndex);
 
         public IEnumerator<T> GetEnumerator() => _list.GetEnumerator();
 

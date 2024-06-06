@@ -1,9 +1,12 @@
 ﻿using PizzaPlace.Models;
 using PizzaPlace.Pizzas;
 
-namespace PizzaPlace.Factories;
-
-public interface IPizzaOven
+namespace PizzaPlace.Factories
 {
-    Task<IEnumerable<Pizza>> PreparePizzas(ComparableList<PizzaPrepareOrder> order, ComparableList<StockDto> stock);
+    public interface IPizzaOven
+    {
+        Task<IEnumerable<Pizza>> PreparePizzas(
+            ComparableList<PizzaPrepareOrder> order,
+            ComparableList<StockDto> stock);
+    }
 }

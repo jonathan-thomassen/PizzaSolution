@@ -1,6 +1,5 @@
 ﻿namespace PizzaPlace
 {
-
     public class PizzaException : Exception
     {
         public PizzaException()
