@@ -67,26 +67,28 @@ public class StockRepositoryTests
         var repository = GetStockRepository();
 
         // Act
-        var actual = await repository.GetStock(stockType);
+        StockDto? actual = await repository.GetStock(stockType);
 
         // Assert
-        Assert.AreEqual(stockType, actual.StockType);
+        Assert.AreEqual(stockType, actual?.StockType);
     }
 
     [TestMethod]
     public async Task GetStock_WithAddToStock()
     {
         // Arrange
-        var addedAmount = 233;
-        var stockType = StockType.GenericSpices;
-        var repository = GetStockRepository();
-        await repository.AddToStock(new StockDto(stockType, 123)); // Ensure the stock type is added.
-        var startStock = await repository.GetStock(stockType);
-        var expected = startStock with { Amount = startStock.Amount + addedAmount };
+        int addedAmount = 233;
+        StockType stockType = StockType.GenericSpices;
+        StockRepository repository = GetStockRepository();
+        // Ensure the stock type is added.
+        await repository.AddToStock(new StockDto(stockType, 123));
+        StockDto? startStock = await repository.GetStock(stockType);
+        StockDto? expected = startStock != null
+            ? startStock with { Amount = startStock.Amount + addedAmount } : null;
 
         // Act
         await repository.AddToStock(new StockDto(stockType, addedAmount));
-        var actual = await repository.GetStock(stockType);
+        StockDto? actual = await repository.GetStock(stockType);
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -99,7 +101,8 @@ public class StockRepositoryTests
         var stockType = StockType.FermentedDough;
         var amount = 7;
         var repository = GetStockRepository();
-        await repository.AddToStock(new StockDto(stockType, amount + 5)); // Ensure stock is present.
+        // Ensure stock is present.
+        await repository.AddToStock(new StockDto(stockType, amount + 5));
         var expected = new StockDto(stockType, amount);
 
         // Act
@@ -130,14 +133,15 @@ public class StockRepositoryTests
     public async Task TakeStock_NotEnoughStock()
     {
         // Arrange
-        var stockType = StockType.FermentedDough;
-        var repository = GetStockRepository();
+        StockType stockType = StockType.FermentedDough;
+        StockRepository repository = GetStockRepository();
         await repository.AddToStock(new StockDto(stockType, 5)); // Ensure stock is present.
-        var startStock = await repository.GetStock(stockType);
-        var amount = startStock.Amount + 1;
+        StockDto? startStock = await repository.GetStock(stockType);
+        int amount = startStock != null ? startStock.Amount + 1 : 0;
 
         // Act
-        var ex = await Assert.ThrowsExceptionAsync<PizzaException>(() => repository.TakeStock(stockType, amount));
+        PizzaException ex = await Assert.ThrowsExceptionAsync<PizzaException>(
+            () => repository.TakeStock(stockType, amount));
 
         // Assert
         Assert.AreEqual("Not enough stock to take the given amount.", ex.Message);
@@ -147,16 +151,18 @@ public class StockRepositoryTests
     public async Task TakeStock_GetStock()
     {
         // Arrange
-        var stockType = StockType.FermentedDough;
-        var amount = 7;
-        var repository = GetStockRepository();
-        await repository.AddToStock(new StockDto(stockType, amount + 8)); // Ensure stock is present.
-        var startStock = await repository.GetStock(stockType);
-        var expected = startStock with { Amount = startStock.Amount - amount };
+        StockType stockType = StockType.FermentedDough;
+        int amount = 7;
+        StockRepository repository = GetStockRepository();
+        // Ensure stock is present.
+        await repository.AddToStock(new StockDto(stockType, amount + 8));
+        StockDto? startStock = await repository.GetStock(stockType);
+        StockDto? expected =
+            startStock != null ? startStock with { Amount = startStock.Amount - amount } : null;
 
         // Act
         await repository.TakeStock(stockType, amount);
-        var actual = await repository.GetStock(stockType);
+        StockDto? actual = await repository.GetStock(stockType);
 
         // Assert
         Assert.AreEqual(expected, actual);

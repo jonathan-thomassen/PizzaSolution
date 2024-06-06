@@ -16,7 +16,7 @@ namespace PizzaPlace.Services
                     {
                         foreach (StockDto ingredient in recipe.Ingredients)
                         {
-                            StockDto stockDto =
+                            StockDto? stockDto =
                                 await stockRepository.GetStock(ingredient.StockType);
                             if (stockDto == null || stockDto.Amount < ingredient.Amount)
                             {
@@ -43,8 +43,8 @@ namespace PizzaPlace.Services
                     {
                         foreach (StockDto ingredient in recipe.Ingredients)
                         {
-                            StockDto stockDto = await stockRepository.GetStock(
-                                ingredient.StockType);
+                            StockDto? stockDto =
+                                await stockRepository.GetStock(ingredient.StockType);
 
                             if (stockDto != null)
                             {

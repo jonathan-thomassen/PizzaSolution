@@ -4,7 +4,7 @@ namespace PizzaPlace.Services;
 
 public class MenuService : IMenuService
 {
-    public async Task<Menu> GetMenu(DateTimeOffset menuDate)
+    public Task<Menu> GetMenu(DateTimeOffset menuDate)
     {
         ComparableList<MenuItem> itemsLunch =
         [
@@ -21,9 +21,9 @@ public class MenuService : IMenuService
 
         if (menuDate.Hour >= 11 && menuDate.Hour < 14)
         {
-            return menuLunch;
+            return Task.FromResult(menuLunch);
         }
 
-        return menuNotLunch;
+        return Task.FromResult(menuNotLunch);
     }
 }

@@ -13,7 +13,7 @@ services.AddCors(o =>
         policy =>
         {
             policy.WithOrigins(
-            // "whatEver.homepage.com"
+                // "whatEver.homepage.com"
             );
             policy.AllowAnyHeader();
             policy.AllowCredentials();
@@ -53,6 +53,5 @@ if (app.Environment.IsDevelopment())
 app.UseDeveloperExceptionPage();
 
 app.UseCors();
-
 app.MapControllers();
 app.Run();

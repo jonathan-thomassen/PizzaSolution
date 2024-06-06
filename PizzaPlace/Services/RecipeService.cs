@@ -16,7 +16,11 @@ namespace PizzaPlace.Services
             ComparableList<PizzaRecipeDto> recipes = [];
             foreach (PizzaRecipeType pizzaType in pizzaTypes)
             {
-                recipes.Add(await recipeRepository.GetRecipe(pizzaType));
+                PizzaRecipeDto? recipe = await recipeRepository.GetRecipe(pizzaType);
+                if (recipe != null)
+                {
+                    recipes.Add(recipe);
+                }
             }
 
             return recipes;
