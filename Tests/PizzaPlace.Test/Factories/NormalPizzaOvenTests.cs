@@ -20,34 +20,34 @@ public class NormalPizzaOvenTests
     public async Task PreparePizzas_OnePizza()
     {
         // Arrange
-        var timeProvider = new FakeTimeProvider();
-        var order = new ComparableList<PizzaPrepareOrder>
-        {
-            new PizzaPrepareOrder(GetTestStandardPizzaRecipe(), 1),
-        };
-        var stock = new ComparableList<Stock>
-        {
-            new Stock(StockType.Dough, 1),
-            new Stock(StockType.Tomatoes, 2),
-            new Stock(StockType.GratedCheese, 1),
-            new Stock(StockType.GenericSpices, 1),
-        };
+        FakeTimeProvider timeProvider = new();
+        ComparableList<PizzaPrepareOrder> order =
+        [
+            new(GetTestStandardPizzaRecipe(), 1),
+        ];
+        ComparableList<Stock> stock =
+        [
+            new(StockType.Dough, 1),
+            new(StockType.Tomatoes, 2),
+            new(StockType.GratedCheese, 1),
+            new(StockType.GenericSpices, 1),
+        ];
 
-        var oven = GetOven(timeProvider);
-        var expectedTime = StandardPizzaPrepareTime;
-        var expectedPizzas = 1;
+        NormalPizzaOven oven = GetOven(timeProvider);
+        int expectedTime = StandardPizzaPrepareTime;
+        int expectedPizzas = 1;
 
         // Act
-        var pizzasTask = oven.PreparePizzas(order, stock);
+        Task<IEnumerable<Pizza>> pizzasTask = oven.PreparePizzas(order, stock);
         timeProvider.PassTimeInMinuteIntervals(expectedTime - 1);
-        var firstCheck = pizzasTask.IsCompleted;
+        bool firstCheck = pizzasTask.IsCompleted;
         timeProvider.PassTimeInMinuteIntervals(1);
-        var secondCheck = pizzasTask.IsCompleted;
+        bool secondCheck = pizzasTask.IsCompleted;
 
         // Assert
         Assert.IsFalse(firstCheck);
         Assert.IsTrue(secondCheck);
-        var pizzas = await pizzasTask;
+        IEnumerable<Pizza> pizzas = await pizzasTask;
         Assert.AreEqual(expectedPizzas, pizzas.Count());
         Assert.IsTrue(pizzas.All(x => x is StandardPizza), "Only standard pizzas");
     }
@@ -56,14 +56,14 @@ public class NormalPizzaOvenTests
     public async Task PreparePizzas_FivePizzas()
     {
         // Arrange
-        var timeProvider = new FakeTimeProvider();
-        var order = new ComparableList<PizzaPrepareOrder>
-        {
+        FakeTimeProvider timeProvider = new();
+        ComparableList<PizzaPrepareOrder> order =
+        [
             new(GetTestStandardPizzaRecipe(), 2),
             new(GetTestTastyPizzaRecipe(), 3)
-        };
-        var stock = new ComparableList<Stock>
-        {
+        ];
+        ComparableList<Stock> stock =
+        [
             new(StockType.Dough, 10),
             new(StockType.Tomatoes, 20),
             new(StockType.GratedCheese, 10),
@@ -71,9 +71,9 @@ public class NormalPizzaOvenTests
             new(StockType.FermentedDough, 3),
             new(StockType.RottenTomatoes, 10),
             new(StockType.Bacon, 3)
-        };
+        ];
 
-        var oven = GetOven(timeProvider);
+        NormalPizzaOven oven = GetOven(timeProvider);
         var expectedTime = StandardPizzaPrepareTime + TastyPizzaPrepareTime;
         var expectedPizzas = 5;
         var expectedStandard = 2;
@@ -89,7 +89,7 @@ public class NormalPizzaOvenTests
         // Assert
         Assert.IsFalse(firstCheck);
         Assert.IsTrue(secondCheck);
-        var pizzas = await pizzasTask;
+        IEnumerable<Pizza> pizzas = await pizzasTask;
         Assert.AreEqual(expectedPizzas, pizzas.Count());
         Assert.AreEqual(expectedStandard, pizzas.Count(x => x is StandardPizza));
         Assert.AreEqual(expectedTasty, pizzas.Count(x => x is ExtremelyTastyPizza));
@@ -99,47 +99,47 @@ public class NormalPizzaOvenTests
     public async Task PreparePizzas_InsufficientIngredients()
     {
         // Arrange
-        var timeProvider = new FakeTimeProvider();
-        var order = new ComparableList<PizzaPrepareOrder>
-        {
-            new PizzaPrepareOrder(GetTestTastyPizzaRecipe(), 3)
-        };
+        FakeTimeProvider timeProvider = new();
+        ComparableList<PizzaPrepareOrder> order =
+        [
+            new(GetTestTastyPizzaRecipe(), 3)
+        ];
         var stock = new ComparableList<Stock>
         {
-            new Stock(StockType.Dough, 10),
-            new Stock(StockType.Tomatoes, 20),
-            new Stock(StockType.GratedCheese, 10),
-            new Stock(StockType.GenericSpices, 10),
-            new Stock(StockType.FermentedDough, 3),
-            new Stock(StockType.RottenTomatoes, 10),
-            new Stock(StockType.Bacon, 2),
+            new(StockType.Dough, 10),
+            new(StockType.Tomatoes, 20),
+            new(StockType.GratedCheese, 10),
+            new(StockType.GenericSpices, 10),
+            new(StockType.FermentedDough, 3),
+            new(StockType.RottenTomatoes, 10),
+            new(StockType.Bacon, 2),
         };
 
         var oven = GetOven(timeProvider);
 
         // Act
-        var ex = await Assert.ThrowsExceptionAsync<PizzaException>(() => oven.PreparePizzas(order, stock));
+        PizzaException ex = await Assert.ThrowsExceptionAsync<PizzaException>(() => oven.PreparePizzas(order, stock));
 
         // Assert
         Assert.AreEqual("Not enough ingredients to create all pizzas.", ex.Message);
     }
 
     public static PizzaRecipe GetTestStandardPizzaRecipe() =>
-        new PizzaRecipe(PizzaRecipeType.StandardPizza, [
-                new Stock(StockType.Dough, 1),
-                new Stock(StockType.Tomatoes, 2),
-                new Stock(StockType.GratedCheese, 1),
-                new Stock(StockType.GenericSpices, 1)
+        new(PizzaRecipeType.StandardPizza, [
+                new(StockType.Dough, 1),
+                new(StockType.Tomatoes, 2),
+                new(StockType.GratedCheese, 1),
+                new(StockType.GenericSpices, 1)
             ], StandardPizzaPrepareTime);
 
     public static PizzaRecipe GetTestTastyPizzaRecipe() =>
-        new PizzaRecipe(PizzaRecipeType.ExtremelyTastyPizza, [
-                new Stock(StockType.FermentedDough, 1),
-                new Stock(StockType.RottenTomatoes, 2),
-                new Stock(StockType.Bacon, 1),
-                new Stock(StockType.GenericSpices, 1)
+        new(PizzaRecipeType.ExtremelyTastyPizza, [
+                new(StockType.FermentedDough, 1),
+                new(StockType.RottenTomatoes, 2),
+                new(StockType.Bacon, 1),
+                new(StockType.GenericSpices, 1)
             ], TastyPizzaPrepareTime);
 
     public static ComparableList<Stock> GetPlentyStock() =>
-        new ComparableList<Stock>(Enum.GetValues<StockType>().Select(type => new Stock(type, int.MaxValue)));
+        new(Enum.GetValues<StockType>().Select(type => new Stock(type, int.MaxValue)));
 }

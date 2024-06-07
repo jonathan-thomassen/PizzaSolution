@@ -19,18 +19,18 @@ public class RecipeControllerTests
     public async Task AddRecipe()
     {
         // Arrange
-        var recipe = new PizzaRecipe(PizzaRecipeType.StandardPizza, [new Stock(StockType.Dough, 1)], 12);
+        PizzaRecipe recipe = new(PizzaRecipeType.StandardPizza, [new(StockType.Dough, 1)], 12);
 
-        var recipeRepository = new Mock<IRecipeRepository>(MockBehavior.Strict);
+        Mock<IRecipeRepository> recipeRepository = new(MockBehavior.Strict);
         recipeRepository.Setup(x => x.AddRecipe(recipe)).ReturnsAsync(recipe.Id);
 
-        var recipeService = new Mock<IRecipeService>(MockBehavior.Strict);
+        Mock<IRecipeService> recipeService = new Mock<IRecipeService>(MockBehavior.Strict);
         recipeService.Setup(x => x.AddPizzaRecipe(recipe)).ReturnsAsync(recipe.Id);
 
-        var controller = GetController(recipeService);
+        RecipeController controller = GetController(recipeService);
 
         // Act
-        var actual = await controller.AddRecipe(recipe);
+        IActionResult actual = await controller.AddRecipe(recipe);
 
         // Assert
         Assert.IsInstanceOfType<OkObjectResult>(actual);
@@ -41,24 +41,29 @@ public class RecipeControllerTests
     public async Task UpdateRecipe()
     {
         // Arrange
-        var oldRecipe = new PizzaRecipe(PizzaRecipeType.StandardPizza, new ComparableList<Stock>() { new Stock(StockType.Dough, 1) }, 12);
+        PizzaRecipe oldRecipe = new(PizzaRecipeType.StandardPizza, [new(StockType.Dough, 1)], 12);
 
-        var newRecipe = new PizzaRecipe(PizzaRecipeType.StandardPizza, new ComparableList<Stock>() { new Stock(StockType.Dough, 1), new Stock(StockType.Tomatoes, 1) }, 12);
+        PizzaRecipe newRecipe = new(PizzaRecipeType.StandardPizza,
+                                    [new(StockType.Dough, 1), new(StockType.Tomatoes, 1)],
+                                    12);
 
+        Mock<IRecipeRepository> recipeRepository = new(MockBehavior.Strict);
+        recipeRepository.Setup(x => x.AddRecipe(oldRecipe))
+            .ReturnsAsync(oldRecipe.Id);
+        recipeRepository.Setup(x => x.UpdateRecipe(newRecipe, oldRecipe.Id))
+            .ReturnsAsync(oldRecipe.Id);
 
-        var recipeRepository = new Mock<IRecipeRepository>(MockBehavior.Strict);
-        recipeRepository.Setup(x => x.AddRecipe(oldRecipe)).ReturnsAsync(oldRecipe.Id);
-        recipeRepository.Setup(x => x.UpdateRecipe(newRecipe, oldRecipe.Id)).ReturnsAsync(oldRecipe.Id);
+        Mock<IRecipeService> recipeService = new(MockBehavior.Strict);
+        recipeService.Setup(x => x.AddPizzaRecipe(oldRecipe))
+            .ReturnsAsync(oldRecipe.Id);
+        recipeService.Setup(x => x.UpdatePizzaRecipe(newRecipe, oldRecipe.Id))
+            .ReturnsAsync(oldRecipe.Id);
 
-        var recipeService = new Mock<IRecipeService>(MockBehavior.Strict);
-        recipeService.Setup(x => x.AddPizzaRecipe(oldRecipe)).ReturnsAsync(oldRecipe.Id);
-        recipeService.Setup(x => x.UpdatePizzaRecipe(newRecipe, oldRecipe.Id)).ReturnsAsync(oldRecipe.Id);
-
-        var controller = GetController(recipeService);
+        RecipeController controller = GetController(recipeService);
 
         // Act
         await controller.AddRecipe(oldRecipe);
-        var actual = await controller.UpdateRecipe(newRecipe, oldRecipe.Id);
+        IActionResult actual = await controller.UpdateRecipe(newRecipe, oldRecipe.Id);
 
         // Assert
         Assert.IsInstanceOfType<OkObjectResult>(actual);

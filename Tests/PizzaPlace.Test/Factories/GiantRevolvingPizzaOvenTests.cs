@@ -19,8 +19,8 @@ public class GiantRevolvingPizzaOvenTests
         var timeProvider = new FakeTimeProvider();
         ComparableList<PizzaPrepareOrder> order =
         [
-            new PizzaPrepareOrder(NormalPizzaOvenTests.GetTestStandardPizzaRecipe(), 100),
-         ];
+            new PizzaPrepareOrder(NormalPizzaOvenTests.GetTestStandardPizzaRecipe(), 100)
+        ];
         var stock = NormalPizzaOvenTests.GetPlentyStock();
 
         var oven = GetOven(timeProvider);
@@ -37,7 +37,7 @@ public class GiantRevolvingPizzaOvenTests
         // Assert
         Assert.IsFalse(firstCheck);
         Assert.IsTrue(secondCheck);
-        var pizzas = await pizzasTask;
+        IEnumerable<Pizza> pizzas = await pizzasTask;
         Assert.AreEqual(expectedPizzas, pizzas.Count());
         Assert.IsTrue(pizzas.All(x => x is StandardPizza), "Only standard pizzas");
     }
@@ -49,8 +49,8 @@ public class GiantRevolvingPizzaOvenTests
         var timeProvider = new FakeTimeProvider();
         ComparableList<PizzaPrepareOrder> order =
         [
-            new PizzaPrepareOrder(NormalPizzaOvenTests.GetTestStandardPizzaRecipe(), 241),
-         ];
+            new(NormalPizzaOvenTests.GetTestStandardPizzaRecipe(), 241)
+        ];
         var stock = NormalPizzaOvenTests.GetPlentyStock();
 
         var oven = GetOven(timeProvider);
@@ -67,7 +67,7 @@ public class GiantRevolvingPizzaOvenTests
         // Assert
         Assert.IsFalse(firstCheck);
         Assert.IsTrue(secondCheck);
-        var pizzas = await pizzasTask;
+        IEnumerable<Pizza> pizzas = await pizzasTask;
         Assert.AreEqual(expectedPizzas, pizzas.Count());
         Assert.IsTrue(pizzas.All(x => x is StandardPizza), "Only standard pizzas");
     }
@@ -76,14 +76,14 @@ public class GiantRevolvingPizzaOvenTests
     public async Task PreparePizzas_MixedPizzas()
     {
         // Arrange
-        var timeProvider = new FakeTimeProvider();
+        FakeTimeProvider timeProvider = new();
         ComparableList<PizzaPrepareOrder> order =
         [
              new PizzaPrepareOrder(NormalPizzaOvenTests.GetTestStandardPizzaRecipe(), 1),
              new PizzaPrepareOrder(NormalPizzaOvenTests.GetTestTastyPizzaRecipe(), 1),
-             new PizzaPrepareOrder(NormalPizzaOvenTests.GetTestStandardPizzaRecipe(), 1),
-         ];
-        var stock = NormalPizzaOvenTests.GetPlentyStock();
+             new PizzaPrepareOrder(NormalPizzaOvenTests.GetTestStandardPizzaRecipe(), 1)
+        ];
+        ComparableList<Stock> stock = NormalPizzaOvenTests.GetPlentyStock();
 
         var oven = GetOven(timeProvider);
         var expectedTime = NormalPizzaOvenTests.StandardPizzaPrepareTime + NormalPizzaOvenTests.TastyPizzaPrepareTime;
@@ -99,7 +99,7 @@ public class GiantRevolvingPizzaOvenTests
         // Assert
         Assert.IsFalse(firstCheck);
         Assert.IsTrue(secondCheck);
-        var pizzas = await pizzasTask;
+        IEnumerable<Pizza> pizzas = await pizzasTask;
         Assert.AreEqual(expectedPizzas, pizzas.Count());
         Assert.AreEqual(2, pizzas.Count(x => x is StandardPizza));
         Assert.AreEqual(1, pizzas.Count(x => x is ExtremelyTastyPizza));

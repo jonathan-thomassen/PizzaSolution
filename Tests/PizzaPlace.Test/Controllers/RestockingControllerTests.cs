@@ -18,16 +18,16 @@ public class RestockingControllerTests
     public async Task RestockTomatoes()
     {
         // Arrange
-        var tomato = new Stock(StockType.Tomatoes, 1);
-        var stock = new ComparableList<Stock>() { tomato };
+        Stock tomato = new(StockType.Tomatoes, 1);
+        ComparableList<Stock> stock = [tomato];
 
-        var stockRepository = new Mock<IStockRepository>(MockBehavior.Strict);
+        Mock<IStockRepository> stockRepository = new(MockBehavior.Strict);
         stockRepository.Setup(x => x.AddToStock(tomato)).ReturnsAsync(tomato);
 
-        var controller = GetController(stockRepository);
+        RestockingController controller = GetController(stockRepository);
 
         // Act
-        var actual = await controller.Restock(stock);
+        IActionResult actual = await controller.Restock(stock);
 
         // Assert
         Assert.IsInstanceOfType<OkResult>(actual);
