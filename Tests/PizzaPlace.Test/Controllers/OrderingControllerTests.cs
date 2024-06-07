@@ -18,16 +18,15 @@ public class OrderingControllerTests
     public async Task PlacePizzaOrder()
     {
         // Arrange
-        var order = new PizzaOrder([new PizzaAmount(PizzaRecipeType.EmptyPizza, 1)]);
+        PizzaOrder order = new([new(PizzaRecipeType.EmptyPizza, 1)]);
 
-        var orderingService = new Mock<IOrderingService>(MockBehavior.Strict);
-        orderingService.Setup(x => x.HandlePizzaOrder(order))
-            .ReturnsAsync([]); // Doesn't matter.
+        Mock<IOrderingService> orderingService = new(MockBehavior.Strict);
+        orderingService.Setup(x => x.HandlePizzaOrder(order)).ReturnsAsync([]); // Doesn't matter.
 
-        var controller = GetController(orderingService);
+        OrderingController controller = GetController(orderingService);
 
         // Act
-        var actual = await controller.PlacePizzaOrder(order);
+        IActionResult actual = await controller.PlacePizzaOrder(order);
 
         // Assert
         Assert.IsInstanceOfType<OkObjectResult>(actual);
