@@ -26,8 +26,7 @@ services.AddControllers();
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 
-services.AddDbContext<StockDtoDBContext>();
-services.AddDbContext<RecipeDtoDBContext>();
+services.AddDbContext<PizzaContext>();
 
 services.AddSingleton(TimeProvider.System);
 

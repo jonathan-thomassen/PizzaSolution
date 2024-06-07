@@ -22,7 +22,7 @@ namespace PizzaPlace.Test.Factories
             [
                 new(NormalPizzaOvenTests.GetTestStandardPizzaRecipe(), 1)
             ];
-            ComparableList<StockDto> stock = NormalPizzaOvenTests.GetPlentyStock();
+            ComparableList<Stock> stock = NormalPizzaOvenTests.GetPlentyStock();
 
             AssemblyLinePizzaOven oven = GetOven(timeProvider);
             int expectedTime = NormalPizzaOvenTests.StandardPizzaPrepareTime +
@@ -30,16 +30,16 @@ namespace PizzaPlace.Test.Factories
             int expectedPizzas = 1;
 
             // Act
-            var pizzasTask = oven.PreparePizzas(order, stock);
+            Task<IEnumerable<Pizza>> pizzasTask = oven.PreparePizzas(order, stock);
             timeProvider.PassTimeInMinuteIntervals(expectedTime - 1);
-            var firstCheck = pizzasTask.IsCompleted;
+            bool firstCheck = pizzasTask.IsCompleted;
             timeProvider.PassTimeInMinuteIntervals(1);
-            var secondCheck = pizzasTask.IsCompleted;
+            bool secondCheck = pizzasTask.IsCompleted;
 
             // Assert
             Assert.IsFalse(firstCheck);
             Assert.IsTrue(secondCheck);
-            var pizzas = await pizzasTask;
+            IEnumerable<Pizza> pizzas = await pizzasTask;
             Assert.AreEqual(expectedPizzas, pizzas.Count());
             Assert.IsTrue(pizzas.All(x => x is StandardPizza), "Only standard pizzas");
         }
@@ -48,24 +48,24 @@ namespace PizzaPlace.Test.Factories
         public async Task PreparePizzas_23_OfTheSameTypePizza()
         {
             // Arrange
-            var timeProvider = new FakeTimeProvider();
+            FakeTimeProvider timeProvider = new();
             ComparableList<PizzaPrepareOrder> order =
             [
-                new(NormalPizzaOvenTests.GetTestTastyPizzaRecipe(), 23),
-        ];
-            var stock = NormalPizzaOvenTests.GetPlentyStock();
+                new(NormalPizzaOvenTests.GetTestTastyPizzaRecipe(), 23)
+            ];
+            ComparableList<Stock> stock = NormalPizzaOvenTests.GetPlentyStock();
 
-            var oven = GetOven(timeProvider);
+            AssemblyLinePizzaOven oven = GetOven(timeProvider);
 
             int expectedTime = 134;
             int expectedPizzas = 23;
 
             // Act
-            var pizzasTask = oven.PreparePizzas(order, stock);
+            Task<IEnumerable<Pizza>> pizzasTask = oven.PreparePizzas(order, stock);
             timeProvider.PassTimeInMinuteIntervals(expectedTime - 1);
-            var firstCheck = pizzasTask.IsCompleted;
+            bool firstCheck = pizzasTask.IsCompleted;
             timeProvider.PassTimeInMinuteIntervals(1);
-            var secondCheck = pizzasTask.IsCompleted;
+            bool secondCheck = pizzasTask.IsCompleted;
 
             // Assert
             Assert.IsFalse(firstCheck);
@@ -83,9 +83,9 @@ namespace PizzaPlace.Test.Factories
             ComparableList<PizzaPrepareOrder> order =
             [
                 new(NormalPizzaOvenTests.GetTestTastyPizzaRecipe(), 10),
-            new(NormalPizzaOvenTests.GetTestStandardPizzaRecipe(), 7)
+                new(NormalPizzaOvenTests.GetTestStandardPizzaRecipe(), 7)
             ];
-            ComparableList<StockDto> stock = NormalPizzaOvenTests.GetPlentyStock();
+            ComparableList<Stock> stock = NormalPizzaOvenTests.GetPlentyStock();
 
             AssemblyLinePizzaOven oven = GetOven(timeProvider);
             int expectedTime = 134;

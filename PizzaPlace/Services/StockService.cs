@@ -6,17 +6,17 @@ namespace PizzaPlace.Services
     public class StockService(IStockRepository stockRepository) : IStockService
     {
         public async Task<bool> HasInsufficientStock(
-            PizzaOrder order, ComparableList<PizzaRecipeDto> recipeDtos)
+            PizzaOrder order, ComparableList<PizzaRecipe> recipeDtos)
         {
             foreach (PizzaAmount pizza in order.RequestedOrder)
             {
-                foreach (PizzaRecipeDto recipe in recipeDtos)
+                foreach (PizzaRecipe recipe in recipeDtos)
                 {
                     if (pizza.PizzaType == recipe.RecipeType)
                     {
-                        foreach (StockDto ingredient in recipe.Ingredients)
+                        foreach (Stock ingredient in recipe.Stock)
                         {
-                            StockDto? stockDto =
+                            Stock? stockDto =
                                 await stockRepository.GetStock(ingredient.StockType);
                             if (stockDto == null || stockDto.Amount < ingredient.Amount)
                             {
@@ -30,20 +30,20 @@ namespace PizzaPlace.Services
             return false;
         }
 
-        public async Task<ComparableList<StockDto>> GetStock(
-            PizzaOrder order, ComparableList<PizzaRecipeDto> recipeDtos)
+        public async Task<ComparableList<Stock>> GetStock(
+            PizzaOrder order, ComparableList<PizzaRecipe> recipeDtos)
         {
-            ComparableList<StockDto> returnList = [];
+            ComparableList<Stock> returnList = [];
 
             foreach (PizzaAmount pizza in order.RequestedOrder)
             {
-                foreach (PizzaRecipeDto recipe in recipeDtos)
+                foreach (PizzaRecipe recipe in recipeDtos)
                 {
                     if (pizza.PizzaType == recipe.RecipeType)
                     {
-                        foreach (StockDto ingredient in recipe.Ingredients)
+                        foreach (Stock ingredient in recipe.Stock)
                         {
-                            StockDto? stockDto =
+                            Stock? stockDto =
                                 await stockRepository.GetStock(ingredient.StockType);
 
                             if (stockDto != null)

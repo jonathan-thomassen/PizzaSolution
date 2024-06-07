@@ -5,8 +5,8 @@ namespace PizzaPlace.Repositories
 {
     public interface IRecipeRepository
     {
-        Task<long> AddRecipe(PizzaRecipeDto recipe);
-        Task<long> UpdateRecipe(PizzaRecipeDto recipe, long id);
-        Task<PizzaRecipeDto?> GetRecipe(PizzaRecipeType recipeType);
+        Task<long> AddRecipe(PizzaRecipe recipe);
+        Task<long> UpdateRecipe(PizzaRecipe recipe, long id);
+        Task<PizzaRecipe?> GetRecipe(PizzaRecipeType recipeType);
     }
 }

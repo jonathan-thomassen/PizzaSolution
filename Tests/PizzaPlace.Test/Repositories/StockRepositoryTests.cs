@@ -15,11 +15,11 @@ public class StockRepositoryTests
     {
         // Arrange
         int addedAmount = 10;
-        StockDto stock = new StockDto(StockType.TrippleBacon, addedAmount);
+        Stock stock = new Stock(StockType.TrippleBacon, addedAmount);
         StockRepository repository = GetStockRepository();
 
         // Act
-        StockDto actual = await repository.AddToStock(stock);
+        Stock actual = await repository.AddToStock(stock);
 
         // Assert
         Assert.IsTrue(actual.Amount >= addedAmount);
@@ -32,8 +32,8 @@ public class StockRepositoryTests
         var addedAmount = 10;
         var secondAddedAmount = 13;
         var expectedLeastAmount = addedAmount + secondAddedAmount;
-        var stock1 = new StockDto(StockType.UnicornDust, addedAmount);
-        var stock2 = new StockDto(StockType.UnicornDust, secondAddedAmount);
+        var stock1 = new Stock(StockType.UnicornDust, addedAmount);
+        var stock2 = new Stock(StockType.UnicornDust, secondAddedAmount);
         var repository = GetStockRepository();
 
         // Act
@@ -49,7 +49,7 @@ public class StockRepositoryTests
     {
         // Arrange
         var addedAmount = -10;
-        var stock = new StockDto(StockType.TrippleBacon, addedAmount);
+        var stock = new Stock(StockType.TrippleBacon, addedAmount);
         var repository = GetStockRepository();
 
         // Act
@@ -67,7 +67,7 @@ public class StockRepositoryTests
         var repository = GetStockRepository();
 
         // Act
-        StockDto? actual = await repository.GetStock(stockType);
+        Stock? actual = await repository.GetStock(stockType);
 
         // Assert
         Assert.AreEqual(stockType, actual?.StockType);
@@ -81,14 +81,14 @@ public class StockRepositoryTests
         StockType stockType = StockType.GenericSpices;
         StockRepository repository = GetStockRepository();
         // Ensure the stock type is added.
-        await repository.AddToStock(new StockDto(stockType, 123));
-        StockDto? startStock = await repository.GetStock(stockType);
-        StockDto? expected = startStock != null
+        await repository.AddToStock(new Stock(stockType, 123));
+        Stock? startStock = await repository.GetStock(stockType);
+        Stock? expected = startStock != null
             ? startStock with { Amount = startStock.Amount + addedAmount } : null;
 
         // Act
-        await repository.AddToStock(new StockDto(stockType, addedAmount));
-        StockDto? actual = await repository.GetStock(stockType);
+        await repository.AddToStock(new Stock(stockType, addedAmount));
+        Stock? actual = await repository.GetStock(stockType);
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -102,8 +102,8 @@ public class StockRepositoryTests
         var amount = 7;
         var repository = GetStockRepository();
         // Ensure stock is present.
-        await repository.AddToStock(new StockDto(stockType, amount + 5));
-        var expected = new StockDto(stockType, amount);
+        await repository.AddToStock(new Stock(stockType, amount + 5));
+        var expected = new Stock(stockType, amount);
 
         // Act
         var actual = await repository.TakeStock(stockType, amount);
@@ -120,7 +120,7 @@ public class StockRepositoryTests
         // Arrange
         var stockType = StockType.FermentedDough;
         var repository = GetStockRepository();
-        await repository.AddToStock(new StockDto(stockType, 5)); // Ensure stock is present.
+        await repository.AddToStock(new Stock(stockType, 5)); // Ensure stock is present.
 
         // Act
         var ex = await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => repository.TakeStock(stockType, amount));
@@ -135,8 +135,8 @@ public class StockRepositoryTests
         // Arrange
         StockType stockType = StockType.FermentedDough;
         StockRepository repository = GetStockRepository();
-        await repository.AddToStock(new StockDto(stockType, 5)); // Ensure stock is present.
-        StockDto? startStock = await repository.GetStock(stockType);
+        await repository.AddToStock(new Stock(stockType, 5)); // Ensure stock is present.
+        Stock? startStock = await repository.GetStock(stockType);
         int amount = startStock != null ? startStock.Amount + 1 : 0;
 
         // Act
@@ -155,14 +155,14 @@ public class StockRepositoryTests
         int amount = 7;
         StockRepository repository = GetStockRepository();
         // Ensure stock is present.
-        await repository.AddToStock(new StockDto(stockType, amount + 8));
-        StockDto? startStock = await repository.GetStock(stockType);
-        StockDto? expected =
+        await repository.AddToStock(new Stock(stockType, amount + 8));
+        Stock? startStock = await repository.GetStock(stockType);
+        Stock? expected =
             startStock != null ? startStock with { Amount = startStock.Amount - amount } : null;
 
         // Act
         await repository.TakeStock(stockType, amount);
-        StockDto? actual = await repository.GetStock(stockType);
+        Stock? actual = await repository.GetStock(stockType);
 
         // Assert
         Assert.AreEqual(expected, actual);

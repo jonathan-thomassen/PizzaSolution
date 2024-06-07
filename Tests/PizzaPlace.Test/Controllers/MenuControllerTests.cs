@@ -23,8 +23,7 @@ namespace PizzaPlace.Test.Controllers
             Menu menu = new("Just a test menu", []);
 
             Mock<IMenuService> menuService = new(MockBehavior.Strict);
-            menuService.Setup(x => x.GetMenu(time))
-                .ReturnsAsync(menu);
+            menuService.Setup(x => x.GetMenu(time)).ReturnsAsync(menu);
 
             MenuController controller = GetController(timeProvider, menuService);
 

@@ -15,12 +15,12 @@ namespace PizzaPlace.Factories
 
         public async Task<IEnumerable<Pizza>> PreparePizzas(
             ComparableList<PizzaPrepareOrder> order,
-            ComparableList<StockDto> stock)
+            ComparableList<Stock> stock)
         {
             if (!stock.HasEnough(order.GetRequiredStock()))
                 throw new PizzaException("Not enough ingredients to create all pizzas.");
 
-            List<(PizzaRecipeDto Recipe, Guid OrderGuid)> recipeOrders = order
+            List<(PizzaRecipe Recipe, Guid OrderGuid)> recipeOrders = order
                 .SelectMany(order => Enumerable.Range(0, order.OrderAmount)
                 .Select(_ => (order.RecipeDto, Guid.NewGuid())))
                 .ToList();
@@ -53,7 +53,7 @@ namespace PizzaPlace.Factories
         }
 
         protected abstract void PlanPizzaMaking(
-            IEnumerable<(PizzaRecipeDto Recipe, Guid Guid)> recipeOrders);
+            IEnumerable<(PizzaRecipe Recipe, Guid Guid)> recipeOrders);
 
         protected Task CookPizza(int cookingTimeMinutes) =>
             Task.Delay(TimeSpan.FromMinutes(cookingTimeMinutes), timeProvider);

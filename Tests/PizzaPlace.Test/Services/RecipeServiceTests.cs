@@ -22,15 +22,15 @@ namespace PizzaPlace.Test.Services
                 new PizzaAmount(PizzaRecipeType.OddPizza, 2),
                 new PizzaAmount(PizzaRecipeType.RarePizza, 20),
             ]);
-            PizzaRecipeDto rareRecipe = new(
+            PizzaRecipe rareRecipe = new(
                 PizzaRecipeType.RarePizza,
-                [new StockDto(StockType.UnicornDust, 1)],
+                [new Stock(StockType.UnicornDust, 1)],
                 1);
-            PizzaRecipeDto oddRecipe = new(
+            PizzaRecipe oddRecipe = new(
                 PizzaRecipeType.OddPizza,
-                [new StockDto(StockType.Sulphur, 10)],
+                [new Stock(StockType.Sulphur, 10)],
                 100);
-            ComparableList<PizzaRecipeDto> expected = [rareRecipe, oddRecipe];
+            ComparableList<PizzaRecipe> expected = [rareRecipe, oddRecipe];
 
             Mock<IRecipeRepository> recipeRepository = new(MockBehavior.Strict);
             recipeRepository.Setup(x => x.GetRecipe(PizzaRecipeType.RarePizza))
@@ -41,7 +41,7 @@ namespace PizzaPlace.Test.Services
             RecipeService service = GetService(recipeRepository);
 
             // Act
-            ComparableList<PizzaRecipeDto> actual = await service.GetPizzaRecipes(order);
+            ComparableList<PizzaRecipe> actual = await service.GetPizzaRecipes(order);
 
             // Assert
             Assert.AreEqual(expected, actual);

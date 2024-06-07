@@ -10,11 +10,11 @@ public class RecipeRepositoryTests
 {
     private static RecipeRepository GetRecipeRepository() => new();
 
-    private static ComparableList<StockDto> GetStandardIngredients() =>
+    private static ComparableList<Stock> GetStandardIngredients() =>
     [
-        new StockDto(StockType.Dough, 3),
-        new StockDto(StockType.Tomatoes, 10),
-        new StockDto(StockType.Bacon, 2),
+        new Stock(StockType.Dough, 3),
+        new Stock(StockType.Tomatoes, 10),
+        new Stock(StockType.Bacon, 2),
     ];
     private const int StandardCookingTime = 19;
     private static long StandardRecipeId { get; set; }
@@ -26,7 +26,7 @@ public class RecipeRepositoryTests
         if (StandardRecipeId > 0)
             return;
 
-        var recipe = new PizzaRecipeDto(PizzaRecipeType.StandardPizza,
+        var recipe = new PizzaRecipe(PizzaRecipeType.StandardPizza,
                                         GetStandardIngredients(),
                                         StandardCookingTime);
         var repository = GetRecipeRepository();
@@ -44,7 +44,7 @@ public class RecipeRepositoryTests
     {
         // Arrange
         await AddRecipe();
-        var recipe = new PizzaRecipeDto(PizzaRecipeType.StandardPizza, [new StockDto(StockType.UnicornDust, 123), new StockDto(StockType.Anchovies, 1)], StandardCookingTime);
+        var recipe = new PizzaRecipe(PizzaRecipeType.StandardPizza, [new Stock(StockType.UnicornDust, 123), new Stock(StockType.Anchovies, 1)], StandardCookingTime);
         var repository = GetRecipeRepository();
 
         // Act
@@ -60,7 +60,7 @@ public class RecipeRepositoryTests
         // Arrange
         var pizzaType = PizzaRecipeType.StandardPizza;
         await AddRecipe();
-        var expected = new PizzaRecipeDto(pizzaType, GetStandardIngredients(), StandardCookingTime, StandardRecipeId);
+        var expected = new PizzaRecipe(pizzaType, GetStandardIngredients(), StandardCookingTime, StandardRecipeId);
         var repository = GetRecipeRepository();
 
         // Act

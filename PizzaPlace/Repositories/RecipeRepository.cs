@@ -9,7 +9,7 @@ namespace PizzaPlace.Repositories
         private static readonly PizzaContext s_dbContext = new();
         private static readonly object s_lock = new();
 
-        public async Task<long> AddRecipe(PizzaRecipeDto recipe)
+        public async Task<long> AddRecipe(PizzaRecipe recipe)
         {
             await s_dbContext.AddAsync(recipe);
             await s_dbContext.SaveChangesAsync();
@@ -17,9 +17,9 @@ namespace PizzaPlace.Repositories
             return recipe.Id;
         }
 
-        public async Task<long> UpdateRecipe(PizzaRecipeDto recipe, long id)
+        public async Task<long> UpdateRecipe(PizzaRecipe recipe, long id)
         {
-            PizzaRecipeDto? oldRecipe = await s_dbContext.FindAsync<PizzaRecipeDto>(id);
+            PizzaRecipe? oldRecipe = await s_dbContext.FindAsync<PizzaRecipe>(id);
             if (oldRecipe != null)
             {
                 lock (s_lock)
@@ -32,9 +32,9 @@ namespace PizzaPlace.Repositories
             return id;
         }
 
-        public async Task<PizzaRecipeDto?> GetRecipe(PizzaRecipeType recipeType)
+        public async Task<PizzaRecipe?> GetRecipe(PizzaRecipeType recipeType)
         {
-            PizzaRecipeDto? recipe =
+            PizzaRecipe? recipe =
                 await s_dbContext.Recipes.FirstOrDefaultAsync(r => r.RecipeType == recipeType);
 
             return recipe;

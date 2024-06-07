@@ -16,15 +16,15 @@ namespace PizzaPlace.Factories
         protected override int Capacity => GiantRevolvingPizzaOvenCapacity;
 
         protected override void PlanPizzaMaking(
-            IEnumerable<(PizzaRecipeDto Recipe, Guid Guid)> recipeOrders)
+            IEnumerable<(PizzaRecipe Recipe, Guid Guid)> recipeOrders)
         {
-            foreach ((PizzaRecipeDto recipe, Guid orderGuid) in recipeOrders)
+            foreach ((PizzaRecipe recipe, Guid orderGuid) in recipeOrders)
             {
                 _pizzaQueue.Enqueue((MakePizza(recipe), orderGuid));
             }
         }
 
-        private Func<Task<Pizza?>> MakePizza(PizzaRecipeDto recipe) => async () =>
+        private Func<Task<Pizza?>> MakePizza(PizzaRecipe recipe) => async () =>
         {
             if (_previousCookingTime == null || recipe.CookingTimeMinutes == _previousCookingTime)
             {

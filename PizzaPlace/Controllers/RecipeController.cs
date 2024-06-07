@@ -8,13 +8,13 @@ namespace PizzaPlace.Controllers
     public class RecipeController(IRecipeService recipeService) : ControllerBase
     {
         [HttpPost]
-        public async Task<IActionResult> AddRecipe([FromBody] PizzaRecipeDto recipe)
+        public async Task<IActionResult> AddRecipe([FromBody] PizzaRecipe recipe)
         {
             return Ok(await recipeService.AddPizzaRecipe(recipe));
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateRecipe([FromBody] PizzaRecipeDto recipe, long id)
+        public async Task<IActionResult> UpdateRecipe([FromBody] PizzaRecipe recipe, long id)
         {
             return Ok(await recipeService.UpdatePizzaRecipe(recipe, id));
         }

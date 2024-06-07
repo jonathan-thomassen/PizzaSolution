@@ -25,12 +25,12 @@ public class NormalPizzaOvenTests
         {
             new PizzaPrepareOrder(GetTestStandardPizzaRecipe(), 1),
         };
-        var stock = new ComparableList<StockDto>
+        var stock = new ComparableList<Stock>
         {
-            new StockDto(StockType.Dough, 1),
-            new StockDto(StockType.Tomatoes, 2),
-            new StockDto(StockType.GratedCheese, 1),
-            new StockDto(StockType.GenericSpices, 1),
+            new Stock(StockType.Dough, 1),
+            new Stock(StockType.Tomatoes, 2),
+            new Stock(StockType.GratedCheese, 1),
+            new Stock(StockType.GenericSpices, 1),
         };
 
         var oven = GetOven(timeProvider);
@@ -62,7 +62,7 @@ public class NormalPizzaOvenTests
             new(GetTestStandardPizzaRecipe(), 2),
             new(GetTestTastyPizzaRecipe(), 3)
         };
-        var stock = new ComparableList<StockDto>
+        var stock = new ComparableList<Stock>
         {
             new(StockType.Dough, 10),
             new(StockType.Tomatoes, 20),
@@ -104,15 +104,15 @@ public class NormalPizzaOvenTests
         {
             new PizzaPrepareOrder(GetTestTastyPizzaRecipe(), 3)
         };
-        var stock = new ComparableList<StockDto>
+        var stock = new ComparableList<Stock>
         {
-            new StockDto(StockType.Dough, 10),
-            new StockDto(StockType.Tomatoes, 20),
-            new StockDto(StockType.GratedCheese, 10),
-            new StockDto(StockType.GenericSpices, 10),
-            new StockDto(StockType.FermentedDough, 3),
-            new StockDto(StockType.RottenTomatoes, 10),
-            new StockDto(StockType.Bacon, 2),
+            new Stock(StockType.Dough, 10),
+            new Stock(StockType.Tomatoes, 20),
+            new Stock(StockType.GratedCheese, 10),
+            new Stock(StockType.GenericSpices, 10),
+            new Stock(StockType.FermentedDough, 3),
+            new Stock(StockType.RottenTomatoes, 10),
+            new Stock(StockType.Bacon, 2),
         };
 
         var oven = GetOven(timeProvider);
@@ -124,22 +124,22 @@ public class NormalPizzaOvenTests
         Assert.AreEqual("Not enough ingredients to create all pizzas.", ex.Message);
     }
 
-    public static PizzaRecipeDto GetTestStandardPizzaRecipe() =>
-        new PizzaRecipeDto(PizzaRecipeType.StandardPizza, [
-                new StockDto(StockType.Dough, 1),
-                new StockDto(StockType.Tomatoes, 2),
-                new StockDto(StockType.GratedCheese, 1),
-                new StockDto(StockType.GenericSpices, 1)
+    public static PizzaRecipe GetTestStandardPizzaRecipe() =>
+        new PizzaRecipe(PizzaRecipeType.StandardPizza, [
+                new Stock(StockType.Dough, 1),
+                new Stock(StockType.Tomatoes, 2),
+                new Stock(StockType.GratedCheese, 1),
+                new Stock(StockType.GenericSpices, 1)
             ], StandardPizzaPrepareTime);
 
-    public static PizzaRecipeDto GetTestTastyPizzaRecipe() =>
-        new PizzaRecipeDto(PizzaRecipeType.ExtremelyTastyPizza, [
-                new StockDto(StockType.FermentedDough, 1),
-                new StockDto(StockType.RottenTomatoes, 2),
-                new StockDto(StockType.Bacon, 1),
-                new StockDto(StockType.GenericSpices, 1)
+    public static PizzaRecipe GetTestTastyPizzaRecipe() =>
+        new PizzaRecipe(PizzaRecipeType.ExtremelyTastyPizza, [
+                new Stock(StockType.FermentedDough, 1),
+                new Stock(StockType.RottenTomatoes, 2),
+                new Stock(StockType.Bacon, 1),
+                new Stock(StockType.GenericSpices, 1)
             ], TastyPizzaPrepareTime);
 
-    public static ComparableList<StockDto> GetPlentyStock() =>
-        new ComparableList<StockDto>(Enum.GetValues<StockType>().Select(type => new StockDto(type, int.MaxValue)));
+    public static ComparableList<Stock> GetPlentyStock() =>
+        new ComparableList<Stock>(Enum.GetValues<StockType>().Select(type => new Stock(type, int.MaxValue)));
 }
