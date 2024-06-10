@@ -17,57 +17,74 @@ public class RecipeRepositoryTests
         new Stock(StockType.Bacon, 2),
     ];
     private const int StandardCookingTime = 19;
-    private static long StandardRecipeId { get; set; }
 
     [TestMethod]
     public async Task AddRecipe()
     {
         // Arrange
-        if (StandardRecipeId > 0)
-            return;
-
-        var recipe = new PizzaRecipe(PizzaRecipeType.StandardPizza,
+        var recipe = new Recipe(PizzaRecipeType.StandardPizza,
                                         GetStandardIngredients(),
                                         StandardCookingTime);
         var repository = GetRecipeRepository();
 
         // Act
-        var actual = await repository.AddRecipe(recipe);
+        long actual = await repository.AddRecipe(recipe);
 
         // Assert
         Assert.IsTrue(actual > 0, "Recipe has an id.");
-        StandardRecipeId = actual;
     }
 
     [TestMethod]
     public async Task AddRecipe_AlreadyAdded()
     {
         // Arrange
-        await AddRecipe();
-        var recipe = new PizzaRecipe(PizzaRecipeType.StandardPizza, [new Stock(StockType.UnicornDust, 123), new Stock(StockType.Anchovies, 1)], StandardCookingTime);
-        var repository = GetRecipeRepository();
+        Recipe oldRecipe = new(
+            PizzaRecipeType.StandardPizza,
+            GetStandardIngredients(),
+            StandardCookingTime);
+
+        RecipeRepository repository = GetRecipeRepository();
+        await repository.AddRecipe(oldRecipe);
+
+        Recipe newRecipe = new(
+            PizzaRecipeType.StandardPizza,
+            [new(StockType.UnicornDust, 123), new(StockType.Anchovies, 1)],
+            StandardCookingTime);
+        newRecipe.Id = oldRecipe.Id;
 
         // Act
-        var ex = await Assert.ThrowsExceptionAsync<PizzaException>(() => repository.AddRecipe(recipe));
+        InvalidOperationException ex =
+            await Assert.ThrowsExceptionAsync<InvalidOperationException>(() =>
+            repository.AddRecipe(newRecipe));
 
         // Assert
-        Assert.AreEqual("Recipe already added for StandardPizza.", ex.Message);
+        Assert.AreEqual(
+            "The instance of entity type 'Recipe' cannot be tracked because another instance " +
+            "with the same key value for {'Id'} is already being tracked. When attaching " +
+            "existing entities, ensure that only one entity instance with a given key value is " +
+            "attached. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to " +
+            "see the conflicting key values.", ex.Message);
     }
 
     [TestMethod]
     public async Task GetRecipe()
     {
         // Arrange
-        var pizzaType = PizzaRecipeType.StandardPizza;
-        await AddRecipe();
-        var expected = new PizzaRecipe(pizzaType, GetStandardIngredients(), StandardCookingTime, StandardRecipeId);
-        var repository = GetRecipeRepository();
+        PizzaRecipeType pizzaType = PizzaRecipeType.StandardPizza;
+
+        Recipe recipe = new(
+            PizzaRecipeType.StandardPizza,
+            GetStandardIngredients(),
+            StandardCookingTime);
+        RecipeRepository repository = GetRecipeRepository();
+
+        await repository.AddRecipe(recipe);
 
         // Act
-        var actual = await repository.GetRecipe(pizzaType);
+        Recipe? actual = await repository.GetRecipe(pizzaType);
 
         // Assert
-        Assert.AreEqual(expected, actual);
+        Assert.AreEqual(recipe, actual);
     }
 
     [TestMethod]

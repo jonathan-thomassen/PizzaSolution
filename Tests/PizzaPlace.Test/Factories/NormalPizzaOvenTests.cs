@@ -124,7 +124,7 @@ public class NormalPizzaOvenTests
         Assert.AreEqual("Not enough ingredients to create all pizzas.", ex.Message);
     }
 
-    public static PizzaRecipe GetTestStandardPizzaRecipe() =>
+    public static Recipe GetTestStandardPizzaRecipe() =>
         new(PizzaRecipeType.StandardPizza, [
                 new(StockType.Dough, 1),
                 new(StockType.Tomatoes, 2),
@@ -132,7 +132,7 @@ public class NormalPizzaOvenTests
                 new(StockType.GenericSpices, 1)
             ], StandardPizzaPrepareTime);
 
-    public static PizzaRecipe GetTestTastyPizzaRecipe() =>
+    public static Recipe GetTestTastyPizzaRecipe() =>
         new(PizzaRecipeType.ExtremelyTastyPizza, [
                 new(StockType.FermentedDough, 1),
                 new(StockType.RottenTomatoes, 2),

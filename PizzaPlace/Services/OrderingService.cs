@@ -13,7 +13,7 @@ namespace PizzaPlace.Services
     {
         public async Task<IEnumerable<Pizza>> HandlePizzaOrder(PizzaOrder order)
         {
-            ComparableList<PizzaRecipe> recipes = await recipeService.GetPizzaRecipes(order);
+            ComparableList<Recipe> recipes = await recipeService.GetPizzaRecipes(order);
             if (await stockService.HasInsufficientStock(order, recipes))
                 throw new PizzaException("Unable to take in order. Insufficient stock.");
 
@@ -27,8 +27,8 @@ namespace PizzaPlace.Services
 
             return await pizzaOven.PreparePizzas(prepareOrder, stock);
 
-            PizzaRecipe GetPizzaRecipe(
-                PizzaRecipeType pizzaType, ComparableList<PizzaRecipe> recipes) =>
+            Recipe GetPizzaRecipe(
+                PizzaRecipeType pizzaType, ComparableList<Recipe> recipes) =>
                 recipes.FirstOrDefault(x => x.RecipeType == pizzaType) ??
                 throw new PizzaException("Missing recipe. Recipe service did not return a " +
                                          $"recipe for {pizzaType} which was expected.");

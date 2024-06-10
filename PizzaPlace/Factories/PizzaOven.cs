@@ -20,7 +20,7 @@ namespace PizzaPlace.Factories
             if (!stock.HasEnough(order.GetRequiredStock()))
                 throw new PizzaException("Not enough ingredients to create all pizzas.");
 
-            List<(PizzaRecipe Recipe, Guid OrderGuid)> recipeOrders = order
+            List<(Recipe Recipe, Guid OrderGuid)> recipeOrders = order
                 .SelectMany(order => Enumerable.Range(0, order.OrderAmount)
                 .Select(_ => (order.RecipeDto, Guid.NewGuid())))
                 .ToList();
@@ -53,7 +53,7 @@ namespace PizzaPlace.Factories
         }
 
         protected abstract void PlanPizzaMaking(
-            IEnumerable<(PizzaRecipe Recipe, Guid Guid)> recipeOrders);
+            IEnumerable<(Recipe Recipe, Guid Guid)> recipeOrders);
 
         protected Task CookPizza(int cookingTimeMinutes) =>
             Task.Delay(TimeSpan.FromMinutes(cookingTimeMinutes), timeProvider);

@@ -27,17 +27,17 @@ namespace PizzaPlace.Test.Services
             new PizzaAmount(PizzaRecipeType.StandardPizza, 4),
         ];
             var order = new PizzaOrder(requests);
-            var standardRecipe = new PizzaRecipe(PizzaRecipeType.StandardPizza,
+            var standardRecipe = new Recipe(PizzaRecipeType.StandardPizza,
                 [
                     new Stock(StockType.Dough, 2),
                 new Stock(StockType.Tomatoes, 1),
             ], 10);
-            var tastyRecipe = new PizzaRecipe(PizzaRecipeType.ExtremelyTastyPizza,
+            var tastyRecipe = new Recipe(PizzaRecipeType.ExtremelyTastyPizza,
                 [
                     new Stock(StockType.UnicornDust, 1),
                 new Stock(StockType.BellPeppers, 2),
             ], 15);
-            ComparableList<PizzaRecipe> recipes = [standardRecipe, tastyRecipe];
+            ComparableList<Recipe> recipes = [standardRecipe, tastyRecipe];
             ComparableList<Stock> returnedStock = [new Stock(StockType.Anchovies, 2)]; // Doesn't matter that it doesn't match recipes.
             ComparableList<PizzaPrepareOrder> prepareOrders =
             [
@@ -84,12 +84,12 @@ namespace PizzaPlace.Test.Services
                 new PizzaAmount(PizzaRecipeType.ExtremelyTastyPizza, 2),
         ];
             var order = new PizzaOrder(requests);
-            var tastyRecipe = new PizzaRecipe(PizzaRecipeType.ExtremelyTastyPizza,
+            var tastyRecipe = new Recipe(PizzaRecipeType.ExtremelyTastyPizza,
                 [
                     new Stock(StockType.UnicornDust, 1),
                 new Stock(StockType.BellPeppers, 2),
             ], 15);
-            ComparableList<PizzaRecipe> recipes = [tastyRecipe];
+            ComparableList<Recipe> recipes = [tastyRecipe];
 
             var stockService = new Mock<IStockService>(MockBehavior.Strict);
             var recipeService = new Mock<IRecipeService>(MockBehavior.Strict);
@@ -121,7 +121,7 @@ namespace PizzaPlace.Test.Services
                 new PizzaAmount(PizzaRecipeType.StandardPizza, 1),
         ];
             var order = new PizzaOrder(requests);
-            ComparableList<PizzaRecipe> recipes = [];
+            ComparableList<Recipe> recipes = [];
             ComparableList<Stock> returnedStock = [new Stock(StockType.Anchovies, 2)]; // Doesn't matter that it doesn't match recipes.
 
             var stockService = new Mock<IStockService>(MockBehavior.Strict);

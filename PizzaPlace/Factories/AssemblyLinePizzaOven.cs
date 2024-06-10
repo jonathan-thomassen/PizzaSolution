@@ -22,15 +22,15 @@ namespace PizzaPlace.Factories
         protected override int Capacity => AssemblyLineCapacity;
 
         protected override void PlanPizzaMaking(
-            IEnumerable<(PizzaRecipe Recipe, Guid Guid)> recipeOrders)
+            IEnumerable<(Recipe Recipe, Guid Guid)> recipeOrders)
         {
-            foreach ((PizzaRecipe recipe, Guid orderGuid) in recipeOrders)
+            foreach ((Recipe recipe, Guid orderGuid) in recipeOrders)
             {
                 _pizzaQueue.Enqueue((MakePizza(recipe), orderGuid));
             }
         }
 
-        private Func<Task<Pizza?>> MakePizza(PizzaRecipe recipe) => async () =>
+        private Func<Task<Pizza?>> MakePizza(Recipe recipe) => async () =>
         {
             if (recipe.RecipeType == _previousRecipeType)
             {

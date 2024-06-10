@@ -6,11 +6,11 @@ namespace PizzaPlace.Services
     public class StockService(IStockRepository stockRepository) : IStockService
     {
         public async Task<bool> HasInsufficientStock(
-            PizzaOrder order, ComparableList<PizzaRecipe> recipeDtos)
+            PizzaOrder order, ComparableList<Recipe> recipeDtos)
         {
             foreach (PizzaAmount pizza in order.RequestedOrder)
             {
-                foreach (PizzaRecipe recipe in recipeDtos)
+                foreach (Recipe recipe in recipeDtos)
                 {
                     if (pizza.PizzaType == recipe.RecipeType)
                     {
@@ -31,13 +31,13 @@ namespace PizzaPlace.Services
         }
 
         public async Task<ComparableList<Stock>> GetStock(
-            PizzaOrder order, ComparableList<PizzaRecipe> recipeDtos)
+            PizzaOrder order, ComparableList<Recipe> recipeDtos)
         {
             ComparableList<Stock> returnList = [];
 
             foreach (PizzaAmount pizza in order.RequestedOrder)
             {
-                foreach (PizzaRecipe recipe in recipeDtos)
+                foreach (Recipe recipe in recipeDtos)
                 {
                     if (pizza.PizzaType == recipe.RecipeType)
                     {

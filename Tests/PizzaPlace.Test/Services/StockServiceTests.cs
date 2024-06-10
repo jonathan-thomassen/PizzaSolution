@@ -19,7 +19,7 @@ namespace PizzaPlace.Test.Services
             PizzaAmount pAmount = new(Models.Types.PizzaRecipeType.StandardPizza, 2);
             PizzaOrder order = new([pAmount]);
 
-            PizzaRecipe recipeDto = new(
+            Recipe recipeDto = new(
                 Models.Types.PizzaRecipeType.StandardPizza,
                 [new Stock(Models.Types.StockType.Dough, 1),
                     new Stock(Models.Types.StockType.Tomatoes, 1)],
@@ -45,7 +45,7 @@ namespace PizzaPlace.Test.Services
             PizzaAmount pAmount = new(Models.Types.PizzaRecipeType.StandardPizza, 2);
             PizzaOrder order = new([pAmount]);
 
-            PizzaRecipe recipeDto = new(
+            Recipe recipeDto = new(
                 Models.Types.PizzaRecipeType.StandardPizza,
                 [new Stock(Models.Types.StockType.Dough, 1),
                     new Stock(Models.Types.StockType.Tomatoes, 1)],

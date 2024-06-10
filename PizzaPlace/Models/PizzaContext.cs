@@ -10,7 +10,7 @@ namespace PizzaPlace.Models
 
         public PizzaContext(DbContextOptions<PizzaContext> options) : base(options) { }
 
-        public virtual DbSet<PizzaRecipe> Recipes { get; set; }
+        public virtual DbSet<Recipe> Recipes { get; set; }
         public virtual DbSet<Stock> Stock { get; set; }
         public virtual DbSet<RecipeStock> RecipeStock { get; set; }
 
@@ -34,7 +34,7 @@ namespace PizzaPlace.Models
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
                         
-            modelBuilder.Entity<PizzaRecipe>(entity =>
+            modelBuilder.Entity<Recipe>(entity =>
             {
                 entity.HasKey(e => e.Id);
 
