@@ -25,12 +25,12 @@ public class NormalPizzaOvenTests
         [
             new(GetTestStandardPizzaRecipe(), 1),
         ];
-        ComparableList<Stock> stock =
+        ComparableList<Ingredient> stock =
         [
-            new(StockType.Dough, 1),
-            new(StockType.Tomatoes, 2),
-            new(StockType.GratedCheese, 1),
-            new(StockType.GenericSpices, 1),
+            new(IngredientType.Dough, 1),
+            new(IngredientType.Tomatoes, 2),
+            new(IngredientType.GratedCheese, 1),
+            new(IngredientType.GenericSpices, 1),
         ];
 
         NormalPizzaOven oven = GetOven(timeProvider);
@@ -62,15 +62,15 @@ public class NormalPizzaOvenTests
             new(GetTestStandardPizzaRecipe(), 2),
             new(GetTestTastyPizzaRecipe(), 3)
         ];
-        ComparableList<Stock> stock =
+        ComparableList<Ingredient> stock =
         [
-            new(StockType.Dough, 10),
-            new(StockType.Tomatoes, 20),
-            new(StockType.GratedCheese, 10),
-            new(StockType.GenericSpices, 10),
-            new(StockType.FermentedDough, 3),
-            new(StockType.RottenTomatoes, 10),
-            new(StockType.Bacon, 3)
+            new(IngredientType.Dough, 10),
+            new(IngredientType.Tomatoes, 20),
+            new(IngredientType.GratedCheese, 10),
+            new(IngredientType.GenericSpices, 10),
+            new(IngredientType.FermentedDough, 3),
+            new(IngredientType.RottenTomatoes, 10),
+            new(IngredientType.Bacon, 3)
         ];
 
         NormalPizzaOven oven = GetOven(timeProvider);
@@ -104,15 +104,15 @@ public class NormalPizzaOvenTests
         [
             new(GetTestTastyPizzaRecipe(), 3)
         ];
-        var stock = new ComparableList<Stock>
+        var stock = new ComparableList<Ingredient>
         {
-            new(StockType.Dough, 10),
-            new(StockType.Tomatoes, 20),
-            new(StockType.GratedCheese, 10),
-            new(StockType.GenericSpices, 10),
-            new(StockType.FermentedDough, 3),
-            new(StockType.RottenTomatoes, 10),
-            new(StockType.Bacon, 2),
+            new(IngredientType.Dough, 10),
+            new(IngredientType.Tomatoes, 20),
+            new(IngredientType.GratedCheese, 10),
+            new(IngredientType.GenericSpices, 10),
+            new(IngredientType.FermentedDough, 3),
+            new(IngredientType.RottenTomatoes, 10),
+            new(IngredientType.Bacon, 2),
         };
 
         var oven = GetOven(timeProvider);
@@ -126,20 +126,20 @@ public class NormalPizzaOvenTests
 
     public static Recipe GetTestStandardPizzaRecipe() =>
         new(PizzaRecipeType.StandardPizza, [
-                new(StockType.Dough, 1),
-                new(StockType.Tomatoes, 2),
-                new(StockType.GratedCheese, 1),
-                new(StockType.GenericSpices, 1)
+                new(IngredientType.Dough, 1),
+                new(IngredientType.Tomatoes, 2),
+                new(IngredientType.GratedCheese, 1),
+                new(IngredientType.GenericSpices, 1)
             ], StandardPizzaPrepareTime);
 
     public static Recipe GetTestTastyPizzaRecipe() =>
         new(PizzaRecipeType.ExtremelyTastyPizza, [
-                new(StockType.FermentedDough, 1),
-                new(StockType.RottenTomatoes, 2),
-                new(StockType.Bacon, 1),
-                new(StockType.GenericSpices, 1)
+                new(IngredientType.FermentedDough, 1),
+                new(IngredientType.RottenTomatoes, 2),
+                new(IngredientType.Bacon, 1),
+                new(IngredientType.GenericSpices, 1)
             ], TastyPizzaPrepareTime);
 
-    public static ComparableList<Stock> GetPlentyStock() =>
-        new(Enum.GetValues<StockType>().Select(type => new Stock(type, int.MaxValue)));
+    public static ComparableList<Ingredient> GetPlentyStock() =>
+        new(Enum.GetValues<IngredientType>().Select(type => new Ingredient(type, int.MaxValue)));
 }

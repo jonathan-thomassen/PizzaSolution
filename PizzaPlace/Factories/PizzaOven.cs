@@ -15,7 +15,7 @@ namespace PizzaPlace.Factories
 
         public async Task<IEnumerable<Pizza>> PreparePizzas(
             ComparableList<PizzaPrepareOrder> order,
-            ComparableList<Stock> stock)
+            ComparableList<Ingredient> stock)
         {
             if (!stock.HasEnough(order.GetRequiredStock()))
                 throw new PizzaException("Not enough ingredients to create all pizzas.");

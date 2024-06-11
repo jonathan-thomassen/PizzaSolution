@@ -83,7 +83,7 @@ public class GiantRevolvingPizzaOvenTests
              new PizzaPrepareOrder(NormalPizzaOvenTests.GetTestTastyPizzaRecipe(), 1),
              new PizzaPrepareOrder(NormalPizzaOvenTests.GetTestStandardPizzaRecipe(), 1)
         ];
-        ComparableList<Stock> stock = NormalPizzaOvenTests.GetPlentyStock();
+        ComparableList<Ingredient> stock = NormalPizzaOvenTests.GetPlentyStock();
 
         var oven = GetOven(timeProvider);
         var expectedTime = NormalPizzaOvenTests.StandardPizzaPrepareTime + NormalPizzaOvenTests.TastyPizzaPrepareTime;

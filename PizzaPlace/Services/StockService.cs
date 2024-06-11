@@ -14,10 +14,10 @@ namespace PizzaPlace.Services
                 {
                     if (pizza.PizzaType == recipe.RecipeType)
                     {
-                        foreach (Stock ingredient in recipe.Stock)
+                        foreach (Ingredient ingredient in recipe.Stock)
                         {
-                            Stock? stockDto =
-                                await stockRepository.GetStock(ingredient.StockType);
+                            Ingredient? stockDto =
+                                await stockRepository.GetStock(ingredient.IngredientType);
                             if (stockDto == null || stockDto.Amount < ingredient.Amount)
                             {
                                 return true;
@@ -30,10 +30,10 @@ namespace PizzaPlace.Services
             return false;
         }
 
-        public async Task<ComparableList<Stock>> GetStock(
+        public async Task<ComparableList<Ingredient>> GetStock(
             PizzaOrder order, ComparableList<Recipe> recipeDtos)
         {
-            ComparableList<Stock> returnList = [];
+            ComparableList<Ingredient> returnList = [];
 
             foreach (PizzaAmount pizza in order.RequestedOrder)
             {
@@ -41,10 +41,10 @@ namespace PizzaPlace.Services
                 {
                     if (pizza.PizzaType == recipe.RecipeType)
                     {
-                        foreach (Stock ingredient in recipe.Stock)
+                        foreach (Ingredient ingredient in recipe.Stock)
                         {
-                            Stock? stockDto =
-                                await stockRepository.GetStock(ingredient.StockType);
+                            Ingredient? stockDto =
+                                await stockRepository.GetStock(ingredient.IngredientType);
 
                             if (stockDto != null)
                             {

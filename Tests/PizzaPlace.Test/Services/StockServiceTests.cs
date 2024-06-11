@@ -21,8 +21,8 @@ namespace PizzaPlace.Test.Services
 
             Recipe recipeDto = new(
                 Models.Types.PizzaRecipeType.StandardPizza,
-                [new Stock(Models.Types.StockType.Dough, 1),
-                    new Stock(Models.Types.StockType.Tomatoes, 1)],
+                [new Ingredient(Models.Types.IngredientType.Dough, 1),
+                    new Ingredient(Models.Types.IngredientType.Tomatoes, 1)],
                 12);
 
             bool expected = true;
@@ -47,18 +47,18 @@ namespace PizzaPlace.Test.Services
 
             Recipe recipeDto = new(
                 Models.Types.PizzaRecipeType.StandardPizza,
-                [new Stock(Models.Types.StockType.Dough, 1),
-                    new Stock(Models.Types.StockType.Tomatoes, 1)],
+                [new Ingredient(Models.Types.IngredientType.Dough, 1),
+                    new Ingredient(Models.Types.IngredientType.Tomatoes, 1)],
                 12);
 
-            ComparableList<Stock> expected = [];
+            ComparableList<Ingredient> expected = [];
 
             Mock<IStockRepository> stockRepository = new();
 
             StockService service = GetService(stockRepository);
 
             // Act
-            ComparableList<Stock> actual = await service.GetStock(order, [recipeDto]);
+            ComparableList<Ingredient> actual = await service.GetStock(order, [recipeDto]);
 
             // Assert
             Assert.AreEqual(expected, actual);

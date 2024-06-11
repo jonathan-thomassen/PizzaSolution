@@ -17,7 +17,7 @@ namespace PizzaPlace.Services
             if (await stockService.HasInsufficientStock(order, recipes))
                 throw new PizzaException("Unable to take in order. Insufficient stock.");
 
-            ComparableList<Stock> stock =  await stockService.GetStock(order, recipes);
+            ComparableList<Ingredient> stock =  await stockService.GetStock(order, recipes);
 
             ComparableList<PizzaPrepareOrder> prepareOrder = order.RequestedOrder
                 .GroupBy(x => x.PizzaType)

@@ -11,8 +11,8 @@ namespace PizzaPlace.Models
         public PizzaContext(DbContextOptions<PizzaContext> options) : base(options) { }
 
         public virtual DbSet<Recipe> Recipes { get; set; }
-        public virtual DbSet<Stock> Stock { get; set; }
-        public virtual DbSet<RecipeStock> RecipeStock { get; set; }
+        public virtual DbSet<Ingredient> Stock { get; set; }
+        public virtual DbSet<RecipeIngredient> RecipeStock { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -38,25 +38,25 @@ namespace PizzaPlace.Models
             {
                 entity.HasKey(e => e.Id);
 
-                entity.HasMany(e => e.Stock).WithMany().UsingEntity<RecipeStock>();
+                entity.HasMany(e => e.Stock).WithMany().UsingEntity<RecipeIngredient>();
 
                 entity.Property(e => e.Id).IsRequired();
                 entity.Property(e => e.CookingTimeMinutes).IsRequired();
                 entity.Property(e => e.RecipeType).IsRequired();
             });
 
-            modelBuilder.Entity<Stock>(entity =>
+            modelBuilder.Entity<Ingredient>(entity =>
             {
                 entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.Id).IsRequired();
-                entity.Property(e => e.StockType).IsRequired();
+                entity.Property(e => e.IngredientType).IsRequired();
                 entity.Property(e => e.Amount).IsRequired();
             });
 
-            modelBuilder.Entity<RecipeStock>(entity =>
+            modelBuilder.Entity<RecipeIngredient>(entity =>
             {
-                entity.HasKey(e => new { e.RecipeId, e.StockId });
+                entity.HasKey(e => new { e.RecipeId, e.IngredientId });
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -24,11 +24,11 @@ namespace PizzaPlace.Test.Services
             ]);
             Recipe rareRecipe = new(
                 PizzaRecipeType.RarePizza,
-                [new Stock(StockType.UnicornDust, 1)],
+                [new Ingredient(IngredientType.UnicornDust, 1)],
                 1);
             Recipe oddRecipe = new(
                 PizzaRecipeType.OddPizza,
-                [new Stock(StockType.Sulphur, 10)],
+                [new Ingredient(IngredientType.Sulphur, 10)],
                 100);
             ComparableList<Recipe> expected = [rareRecipe, oddRecipe];
 

@@ -19,7 +19,7 @@ public class RecipeControllerTests
     public async Task AddRecipe()
     {
         // Arrange
-        Recipe recipe = new(PizzaRecipeType.StandardPizza, [new(StockType.Dough, 1)], 12);
+        Recipe recipe = new(PizzaRecipeType.StandardPizza, [new(IngredientType.Dough, 1)], 12);
 
         Mock<IRecipeRepository> recipeRepository = new(MockBehavior.Strict);
         recipeRepository.Setup(x => x.AddRecipe(recipe)).ReturnsAsync(recipe.Id);
@@ -41,10 +41,10 @@ public class RecipeControllerTests
     public async Task UpdateRecipe()
     {
         // Arrange
-        Recipe oldRecipe = new(PizzaRecipeType.StandardPizza, [new(StockType.Dough, 1)], 12);
+        Recipe oldRecipe = new(PizzaRecipeType.StandardPizza, [new(IngredientType.Dough, 1)], 12);
 
         Recipe newRecipe = new(PizzaRecipeType.StandardPizza,
-                                    [new(StockType.Dough, 1), new(StockType.Tomatoes, 1)],
+                                    [new(IngredientType.Dough, 1), new(IngredientType.Tomatoes, 1)],
                                     12);
 
         Mock<IRecipeRepository> recipeRepository = new(MockBehavior.Strict);

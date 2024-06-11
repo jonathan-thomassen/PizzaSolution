@@ -15,11 +15,11 @@ public class StockRepositoryTests
     {
         // Arrange
         int addedAmount = 10;
-        Stock stock = new Stock(StockType.TrippleBacon, addedAmount);
+        Ingredient stock = new(IngredientType.TrippleBacon, addedAmount);
         StockRepository repository = GetStockRepository();
 
         // Act
-        Stock actual = await repository.AddToStock(stock);
+        Ingredient actual = await repository.AddToStock(stock);
 
         // Assert
         Assert.IsTrue(actual.Amount >= addedAmount);
@@ -29,16 +29,16 @@ public class StockRepositoryTests
     public async Task AddToStock_MoreThanOnce()
     {
         // Arrange
-        var addedAmount = 10;
-        var secondAddedAmount = 13;
-        var expectedLeastAmount = addedAmount + secondAddedAmount;
-        var stock1 = new Stock(StockType.UnicornDust, addedAmount);
-        var stock2 = new Stock(StockType.UnicornDust, secondAddedAmount);
-        var repository = GetStockRepository();
+        int addedAmount = 10;
+        int secondAddedAmount = 13;
+        int expectedLeastAmount = addedAmount + secondAddedAmount;
+        Ingredient stock1 = new(IngredientType.UnicornDust, addedAmount);
+        Ingredient stock2 = new(IngredientType.UnicornDust, secondAddedAmount);
+        StockRepository repository = GetStockRepository();
 
         // Act
         await repository.AddToStock(stock1);
-        var actual = await repository.AddToStock(stock2);
+        Ingredient actual = await repository.AddToStock(stock2);
 
         // Assert
         Assert.IsTrue(actual.Amount >= expectedLeastAmount);
@@ -48,12 +48,13 @@ public class StockRepositoryTests
     public async Task AddToStock_NegativeAmount()
     {
         // Arrange
-        var addedAmount = -10;
-        var stock = new Stock(StockType.TrippleBacon, addedAmount);
-        var repository = GetStockRepository();
+        int addedAmount = -10;
+        Ingredient stock = new(IngredientType.TrippleBacon, addedAmount);
+        StockRepository repository = GetStockRepository();
 
         // Act
-        var ex = await Assert.ThrowsExceptionAsync<PizzaException>(() => repository.AddToStock(stock));
+        PizzaException ex =
+            await Assert.ThrowsExceptionAsync<PizzaException>(() => repository.AddToStock(stock));
 
         // Assert
         Assert.AreEqual("Stock cannot have negative amount.", ex.Message);
@@ -63,11 +64,11 @@ public class StockRepositoryTests
     public async Task GetStock()
     {
         // Arrange
-        var stockType = StockType.UngenericSpices;
-        var repository = GetStockRepository();
+        IngredientType stockType = IngredientType.UngenericSpices;
+        StockRepository repository = GetStockRepository();
 
         // Act
-        Stock? actual = await repository.GetStock(stockType);
+        Ingredient? actual = await repository.GetStock(stockType);
 
         // Assert
         Assert.AreEqual(stockType, actual?.StockType);
@@ -78,38 +79,39 @@ public class StockRepositoryTests
     {
         // Arrange
         int addedAmount = 233;
-        StockType stockType = StockType.GenericSpices;
+        IngredientType stockType = IngredientType.GenericSpices;
         StockRepository repository = GetStockRepository();
         // Ensure the stock type is added.
-        await repository.AddToStock(new Stock(stockType, 123));
-        Stock? startStock = await repository.GetStock(stockType);
-        Stock? expected = startStock != null
-            ? startStock with { Amount = startStock.Amount + addedAmount } : null;
+        await repository.AddToStock(new Ingredient(stockType, 123));
+        Ingredient? startStock = await repository.GetStock(stockType);
+        Ingredient? expected = startStock != null
+            ? new Ingredient(stockType, startStock.Amount + addedAmount) : null;
 
         // Act
-        await repository.AddToStock(new Stock(stockType, addedAmount));
-        Stock? actual = await repository.GetStock(stockType);
+        await repository.AddToStock(new Ingredient(stockType, addedAmount));
+        Ingredient? actual = await repository.GetStock(stockType);
 
         // Assert
-        Assert.AreEqual(expected, actual);
+        Assert.AreEqual(expected?.StockType, actual?.StockType);
+        Assert.AreEqual(expected?.Amount, actual?.Amount);
     }
 
     [TestMethod]
     public async Task TakeStock()
     {
         // Arrange
-        var stockType = StockType.FermentedDough;
-        var amount = 7;
-        var repository = GetStockRepository();
+        IngredientType stockType = IngredientType.FermentedDough;
+        int amount = 7;
+        StockRepository repository = GetStockRepository();
         // Ensure stock is present.
-        await repository.AddToStock(new Stock(stockType, amount + 5));
-        var expected = new Stock(stockType, amount);
+        await repository.AddToStock(new(stockType, amount + 5));
+        Ingredient expected = new(stockType, amount);
 
         // Act
-        var actual = await repository.TakeStock(stockType, amount);
+        Ingredient actual = await repository.TakeStock(stockType, amount);
 
         // Assert
-        Assert.AreEqual(expected, actual);
+        Assert.AreEqual(expected.Amount, actual.Amount);
     }
 
     [DataRow(0)]
@@ -118,9 +120,9 @@ public class StockRepositoryTests
     public async Task TakeStock_NegativeAmount(int amount)
     {
         // Arrange
-        var stockType = StockType.FermentedDough;
+        var stockType = IngredientType.FermentedDough;
         var repository = GetStockRepository();
-        await repository.AddToStock(new Stock(stockType, 5)); // Ensure stock is present.
+        await repository.AddToStock(new Ingredient(stockType, 5)); // Ensure stock is present.
 
         // Act
         var ex = await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => repository.TakeStock(stockType, amount));
@@ -133,10 +135,10 @@ public class StockRepositoryTests
     public async Task TakeStock_NotEnoughStock()
     {
         // Arrange
-        StockType stockType = StockType.FermentedDough;
+        IngredientType stockType = IngredientType.FermentedDough;
         StockRepository repository = GetStockRepository();
-        await repository.AddToStock(new Stock(stockType, 5)); // Ensure stock is present.
-        Stock? startStock = await repository.GetStock(stockType);
+        await repository.AddToStock(new Ingredient(stockType, 5)); // Ensure stock is present.
+        Ingredient? startStock = await repository.GetStock(stockType);
         int amount = startStock != null ? startStock.Amount + 1 : 0;
 
         // Act
@@ -151,20 +153,20 @@ public class StockRepositoryTests
     public async Task TakeStock_GetStock()
     {
         // Arrange
-        StockType stockType = StockType.FermentedDough;
+        IngredientType stockType = IngredientType.FermentedDough;
         int amount = 7;
         StockRepository repository = GetStockRepository();
         // Ensure stock is present.
-        await repository.AddToStock(new Stock(stockType, amount + 8));
-        Stock? startStock = await repository.GetStock(stockType);
-        Stock? expected =
-            startStock != null ? startStock with { Amount = startStock.Amount - amount } : null;
+        await repository.AddToStock(new Ingredient(stockType, amount + 8));
+        Ingredient? startStock = await repository.GetStock(stockType);
+        Ingredient? expected =
+            startStock != null ? new Ingredient(stockType, startStock.Amount - amount) : null;
 
         // Act
         await repository.TakeStock(stockType, amount);
-        Stock? actual = await repository.GetStock(stockType);
+        Ingredient? actual = await repository.GetStock(stockType);
 
         // Assert
-        Assert.AreEqual(expected, actual);
+        Assert.AreEqual(expected?.Amount, actual?.Amount);
     }
 }

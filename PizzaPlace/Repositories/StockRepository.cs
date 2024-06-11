@@ -9,23 +9,42 @@ namespace PizzaPlace.Repositories
         private static readonly PizzaContext s_dbContext = new();
         private static readonly object s_lock = new();
 
-        public async Task<Stock> AddToStock(Stock stock)
+        public async Task<Ingredient> AddToStock(Ingredient stock)
         {
-            await s_dbContext.AddAsync(stock);
+            if (stock.Amount < 0)
+            {
+                throw new PizzaException("Stock cannot have negative amount.");
+            }
+
+            Ingredient? existingStock =
+                await s_dbContext.Stock.FirstOrDefaultAsync(
+                    s => s.IngredientType == stock.IngredientType);
+
+            if (existingStock != null)
+            {
+                existingStock.Amount += stock.Amount;
+            }
+            else
+            {
+                await s_dbContext.AddAsync(stock);
+                existingStock = stock;
+            }
+            
             await s_dbContext.SaveChangesAsync();
 
-            return stock;
+            return existingStock;
         }
 
-        public async Task<Stock?> GetStock(StockType stockType)
+        public async Task<Ingredient?> GetStock(IngredientType ingredientType)
         {
-            Stock? stock =
-                await s_dbContext.Stock.FirstOrDefaultAsync(s => s.StockType == stockType);
+            Ingredient? stock =
+                await s_dbContext.Stock.FirstOrDefaultAsync(
+                    s => s.IngredientType == ingredientType);
 
             return stock;
         }
 
-        public async Task<Stock> TakeStock(StockType stockType, int amount)
+        public async Task<Ingredient> TakeStock(IngredientType stockType, int amount)
         {
             if (amount <= 0)
             {
@@ -33,17 +52,17 @@ namespace PizzaPlace.Repositories
                     nameof(amount), "Unable to take zero or negative amount.");
             }
 
-            Stock? stock = await GetStock(stockType);
+            Ingredient? stock = await GetStock(stockType);
             if (stock == null || stock.Amount < amount)
                 throw new PizzaException("Not enough stock to take the given amount.");
 
-            Stock updatedStock = stock with { Amount = stock.Amount - amount };
             lock (s_lock)
             {
-                s_dbContext.Entry(stock).CurrentValues.SetValues(updatedStock);
+                stock.Amount -= amount;
             }
+            await s_dbContext.SaveChangesAsync();
 
-            return stock with { Amount = amount, Id = 0 };
+            return new Ingredient(stockType, amount);
         }
     }
 }

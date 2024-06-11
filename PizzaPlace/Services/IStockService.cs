@@ -7,7 +7,7 @@ namespace PizzaPlace.Services
         Task<bool> HasInsufficientStock(
             PizzaOrder order, ComparableList<Recipe> recipeDtos);
 
-        Task<ComparableList<Stock>> GetStock(
+        Task<ComparableList<Ingredient>> GetStock(
             PizzaOrder order, ComparableList<Recipe> recipeDtos);
     }
 }

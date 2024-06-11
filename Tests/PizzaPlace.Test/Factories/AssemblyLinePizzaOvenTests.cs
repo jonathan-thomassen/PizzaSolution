@@ -22,7 +22,7 @@ namespace PizzaPlace.Test.Factories
             [
                 new(NormalPizzaOvenTests.GetTestStandardPizzaRecipe(), 1)
             ];
-            ComparableList<Stock> stock = NormalPizzaOvenTests.GetPlentyStock();
+            ComparableList<Ingredient> stock = NormalPizzaOvenTests.GetPlentyStock();
 
             AssemblyLinePizzaOven oven = GetOven(timeProvider);
             int expectedTime = NormalPizzaOvenTests.StandardPizzaPrepareTime +
@@ -53,7 +53,7 @@ namespace PizzaPlace.Test.Factories
             [
                 new(NormalPizzaOvenTests.GetTestTastyPizzaRecipe(), 23)
             ];
-            ComparableList<Stock> stock = NormalPizzaOvenTests.GetPlentyStock();
+            ComparableList<Ingredient> stock = NormalPizzaOvenTests.GetPlentyStock();
 
             AssemblyLinePizzaOven oven = GetOven(timeProvider);
 
@@ -85,7 +85,7 @@ namespace PizzaPlace.Test.Factories
                 new(NormalPizzaOvenTests.GetTestTastyPizzaRecipe(), 10),
                 new(NormalPizzaOvenTests.GetTestStandardPizzaRecipe(), 7)
             ];
-            ComparableList<Stock> stock = NormalPizzaOvenTests.GetPlentyStock();
+            ComparableList<Ingredient> stock = NormalPizzaOvenTests.GetPlentyStock();
 
             AssemblyLinePizzaOven oven = GetOven(timeProvider);
             int expectedTime = 134;

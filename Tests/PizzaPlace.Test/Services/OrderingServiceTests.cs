@@ -29,16 +29,16 @@ namespace PizzaPlace.Test.Services
             var order = new PizzaOrder(requests);
             var standardRecipe = new Recipe(PizzaRecipeType.StandardPizza,
                 [
-                    new Stock(StockType.Dough, 2),
-                new Stock(StockType.Tomatoes, 1),
+                    new Ingredient(IngredientType.Dough, 2),
+                new Ingredient(IngredientType.Tomatoes, 1),
             ], 10);
             var tastyRecipe = new Recipe(PizzaRecipeType.ExtremelyTastyPizza,
                 [
-                    new Stock(StockType.UnicornDust, 1),
-                new Stock(StockType.BellPeppers, 2),
+                    new Ingredient(IngredientType.UnicornDust, 1),
+                new Ingredient(IngredientType.BellPeppers, 2),
             ], 15);
             ComparableList<Recipe> recipes = [standardRecipe, tastyRecipe];
-            ComparableList<Stock> returnedStock = [new Stock(StockType.Anchovies, 2)]; // Doesn't matter that it doesn't match recipes.
+            ComparableList<Ingredient> returnedStock = [new Ingredient(IngredientType.Anchovies, 2)]; // Doesn't matter that it doesn't match recipes.
             ComparableList<PizzaPrepareOrder> prepareOrders =
             [
                 new PizzaPrepareOrder(standardRecipe, 58),
@@ -86,8 +86,8 @@ namespace PizzaPlace.Test.Services
             var order = new PizzaOrder(requests);
             var tastyRecipe = new Recipe(PizzaRecipeType.ExtremelyTastyPizza,
                 [
-                    new Stock(StockType.UnicornDust, 1),
-                new Stock(StockType.BellPeppers, 2),
+                    new Ingredient(IngredientType.UnicornDust, 1),
+                new Ingredient(IngredientType.BellPeppers, 2),
             ], 15);
             ComparableList<Recipe> recipes = [tastyRecipe];
 
@@ -122,7 +122,7 @@ namespace PizzaPlace.Test.Services
         ];
             var order = new PizzaOrder(requests);
             ComparableList<Recipe> recipes = [];
-            ComparableList<Stock> returnedStock = [new Stock(StockType.Anchovies, 2)]; // Doesn't matter that it doesn't match recipes.
+            ComparableList<Ingredient> returnedStock = [new Ingredient(IngredientType.Anchovies, 2)]; // Doesn't matter that it doesn't match recipes.
 
             var stockService = new Mock<IStockService>(MockBehavior.Strict);
             var recipeService = new Mock<IRecipeService>(MockBehavior.Strict);
