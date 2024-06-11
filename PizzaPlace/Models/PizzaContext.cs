@@ -38,7 +38,7 @@ namespace PizzaPlace.Models
             {
                 entity.HasKey(e => e.Id);
 
-                entity.HasMany(e => e.Stock).WithMany().UsingEntity<RecipeIngredient>();
+                entity.HasMany(e => e.Ingredients).WithMany().UsingEntity<RecipeIngredient>();
 
                 entity.Property(e => e.Id).IsRequired();
                 entity.Property(e => e.CookingTimeMinutes).IsRequired();

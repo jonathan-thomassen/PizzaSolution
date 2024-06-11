@@ -8,7 +8,7 @@ namespace PizzaPlace.Extensions
             this IEnumerable<PizzaPrepareOrder> prepareOrders) => prepareOrders
             .SelectMany(order => Enumerable.Range(0, order.OrderAmount)
             .Select(_ => order.RecipeDto))
-            .SelectMany(recipe => recipe.Stock)
+            .SelectMany(recipe => recipe.Ingredients)
             .GatherSameTypeOfStock();
 
         public static IEnumerable<Ingredient> GatherSameTypeOfStock(
