@@ -6,17 +6,17 @@ namespace PizzaPlace.Services
 {
     public class RecipeService(IRecipeRepository recipeRepository) : IRecipeService
     {
-        public async Task<ComparableList<Recipe>> GetPizzaRecipes(PizzaOrder order)
+        public async Task<ComparableList<RecipeDto>> GetPizzaRecipes(PizzaOrder order)
         {
             List<PizzaRecipeType> pizzaTypes = order.RequestedOrder
                 .Select(x => x.PizzaType)
                 .Distinct()
                 .ToList();
 
-            ComparableList<Recipe> recipes = [];
+            ComparableList<RecipeDto> recipes = [];
             foreach (PizzaRecipeType pizzaType in pizzaTypes)
             {
-                Recipe? recipe = await recipeRepository.GetRecipe(pizzaType);
+                RecipeDto? recipe = await recipeRepository.GetRecipe(pizzaType);
                 if (recipe != null)
                 {
                     recipes.Add(recipe);
@@ -26,7 +26,7 @@ namespace PizzaPlace.Services
             return recipes;
         }
 
-        public async Task<long> AddPizzaRecipe(Recipe recipe)
+        public async Task<long> AddPizzaRecipe(RecipeDto recipe)
         {
             long result = await recipeRepository.AddRecipe(recipe);
 
@@ -34,7 +34,7 @@ namespace PizzaPlace.Services
         }
 
         public async Task<long> UpdatePizzaRecipe(
-            Recipe recipe, long id)
+            RecipeDto recipe, long id)
         {
             long result = await recipeRepository.UpdateRecipe(recipe, id);
 

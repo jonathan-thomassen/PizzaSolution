@@ -7,6 +7,6 @@ namespace PizzaPlace.Factories
     {
         Task<IEnumerable<Pizza>> PreparePizzas(
             ComparableList<PizzaPrepareOrder> order,
-            ComparableList<Stock> stock);
+            ComparableList<StockDto> stock);
     }
 }

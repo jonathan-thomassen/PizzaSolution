@@ -25,7 +25,7 @@ public class NormalPizzaOvenTests
         [
             new(GetTestStandardPizzaRecipe(), 1),
         ];
-        ComparableList<Stock> stock =
+        ComparableList<StockDto> stock =
         [
             new(StockType.Dough, 1),
             new(StockType.Tomatoes, 2),
@@ -62,7 +62,7 @@ public class NormalPizzaOvenTests
             new(GetTestStandardPizzaRecipe(), 2),
             new(GetTestTastyPizzaRecipe(), 3)
         ];
-        ComparableList<Stock> stock =
+        ComparableList<StockDto> stock =
         [
             new(StockType.Dough, 10),
             new(StockType.Tomatoes, 20),
@@ -104,7 +104,7 @@ public class NormalPizzaOvenTests
         [
             new(GetTestTastyPizzaRecipe(), 3)
         ];
-        var stock = new ComparableList<Stock>
+        var stock = new ComparableList<StockDto>
         {
             new(StockType.Dough, 10),
             new(StockType.Tomatoes, 20),
@@ -124,7 +124,7 @@ public class NormalPizzaOvenTests
         Assert.AreEqual("Not enough ingredients to create all pizzas.", ex.Message);
     }
 
-    public static Recipe GetTestStandardPizzaRecipe() =>
+    public static RecipeDto GetTestStandardPizzaRecipe() =>
         new(PizzaRecipeType.StandardPizza, [
                 new(StockType.Dough, 1),
                 new(StockType.Tomatoes, 2),
@@ -132,7 +132,7 @@ public class NormalPizzaOvenTests
                 new(StockType.GenericSpices, 1)
             ], StandardPizzaPrepareTime);
 
-    public static Recipe GetTestTastyPizzaRecipe() =>
+    public static RecipeDto GetTestTastyPizzaRecipe() =>
         new(PizzaRecipeType.ExtremelyTastyPizza, [
                 new(StockType.FermentedDough, 1),
                 new(StockType.RottenTomatoes, 2),
@@ -140,6 +140,6 @@ public class NormalPizzaOvenTests
                 new(StockType.GenericSpices, 1)
             ], TastyPizzaPrepareTime);
 
-    public static ComparableList<Stock> GetPlentyStock() =>
-        new(Enum.GetValues<StockType>().Select(type => new Stock(type, int.MaxValue)));
+    public static ComparableList<StockDto> GetPlentyStock() =>
+        new(Enum.GetValues<StockType>().Select(type => new StockDto(type, int.MaxValue)));
 }

@@ -2,7 +2,7 @@
 
 namespace PizzaPlace.Models
 {
-    public record Stock(
+    public record StockDto(
         StockType StockType,
         int Amount,
         long Id = 0);

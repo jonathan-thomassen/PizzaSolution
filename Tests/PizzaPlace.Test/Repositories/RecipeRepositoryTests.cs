@@ -10,11 +10,11 @@ public class RecipeRepositoryTests
 {
     private static RecipeRepository GetRecipeRepository() => new();
 
-    private static ComparableList<Stock> GetStandardIngredients() =>
+    private static ComparableList<StockDto> GetStandardIngredients() =>
     [
-        new Stock(StockType.Dough, 3),
-        new Stock(StockType.Tomatoes, 10),
-        new Stock(StockType.Bacon, 2),
+        new StockDto(StockType.Dough, 3),
+        new StockDto(StockType.Tomatoes, 10),
+        new StockDto(StockType.Bacon, 2),
     ];
     private const int StandardCookingTime = 19;
 
@@ -22,7 +22,7 @@ public class RecipeRepositoryTests
     public async Task AddRecipe()
     {
         // Arrange
-        var recipe = new Recipe(PizzaRecipeType.StandardPizza,
+        var recipe = new RecipeDto(PizzaRecipeType.StandardPizza,
                                         GetStandardIngredients(),
                                         StandardCookingTime);
         var repository = GetRecipeRepository();
@@ -38,7 +38,7 @@ public class RecipeRepositoryTests
     public async Task AddRecipe_AlreadyAdded()
     {
         // Arrange
-        Recipe oldRecipe = new(
+        RecipeDto oldRecipe = new(
             PizzaRecipeType.StandardPizza,
             GetStandardIngredients(),
             StandardCookingTime);
@@ -46,7 +46,7 @@ public class RecipeRepositoryTests
         RecipeRepository repository = GetRecipeRepository();
         await repository.AddRecipe(oldRecipe);
 
-        Recipe newRecipe = new(
+        RecipeDto newRecipe = new(
             PizzaRecipeType.StandardPizza,
             [new(StockType.UnicornDust, 123), new(StockType.Anchovies, 1)],
             StandardCookingTime);
@@ -59,7 +59,7 @@ public class RecipeRepositoryTests
 
         // Assert
         Assert.AreEqual(
-            "The instance of entity type 'Recipe' cannot be tracked because another instance " +
+            "The instance of entity type 'RecipeDto' cannot be tracked because another instance " +
             "with the same key value for {'Id'} is already being tracked. When attaching " +
             "existing entities, ensure that only one entity instance with a given key value is " +
             "attached. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to " +
@@ -72,7 +72,7 @@ public class RecipeRepositoryTests
         // Arrange
         PizzaRecipeType pizzaType = PizzaRecipeType.StandardPizza;
 
-        Recipe recipe = new(
+        RecipeDto recipe = new(
             PizzaRecipeType.StandardPizza,
             GetStandardIngredients(),
             StandardCookingTime);
@@ -81,10 +81,11 @@ public class RecipeRepositoryTests
         await repository.AddRecipe(recipe);
 
         // Act
-        Recipe? actual = await repository.GetRecipe(pizzaType);
+        RecipeDto? actual = await repository.GetRecipe(pizzaType);
 
         // Assert
-        Assert.AreEqual(recipe, actual);
+        Assert.AreEqual(recipe.RecipeType, actual.RecipeType);
+        Assert.AreEqual(recipe.StockDto, actual.StockDto);
     }
 
     [TestMethod]

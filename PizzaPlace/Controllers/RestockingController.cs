@@ -8,9 +8,9 @@ namespace PizzaPlace.Controllers
     public class RestockingController(IStockRepository stockRepository) : ControllerBase
     {
         [HttpPost]
-        public async Task<IActionResult> Restock([FromBody] ComparableList<Stock> stock)
+        public async Task<IActionResult> Restock([FromBody] ComparableList<StockDto> stock)
         {
-            foreach (Stock item in stock)
+            foreach (StockDto item in stock)
             {
                 await stockRepository.AddToStock(item);
             }

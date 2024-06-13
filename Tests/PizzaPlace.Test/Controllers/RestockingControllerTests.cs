@@ -18,8 +18,8 @@ public class RestockingControllerTests
     public async Task RestockTomatoes()
     {
         // Arrange
-        Stock tomato = new(StockType.Tomatoes, 1);
-        ComparableList<Stock> stock = [tomato];
+        StockDto tomato = new(StockType.Tomatoes, 1);
+        ComparableList<StockDto> stock = [tomato];
 
         Mock<IStockRepository> stockRepository = new(MockBehavior.Strict);
         stockRepository.Setup(x => x.AddToStock(tomato)).ReturnsAsync(tomato);

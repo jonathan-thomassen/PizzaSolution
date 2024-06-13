@@ -2,19 +2,19 @@
 
 namespace PizzaPlace.Models
 {
-    public class Recipe
+    public class RecipeDto
     {
         public PizzaRecipeType RecipeType { get; set; }
-        public ComparableList<Stock> Stock { get; set; } = [];
+        public ComparableList<StockDto> StockDto { get; set; } = [];
         public int CookingTimeMinutes { get; set; }
         public long Id { get; set; }
 
-        public Recipe() { }
+        public RecipeDto() { }
 
-        public Recipe(PizzaRecipeType recipeType, ComparableList<Stock> ingredients, int cookingTimeMinutes, long id = 0)
+        public RecipeDto(PizzaRecipeType recipeType, ComparableList<StockDto> ingredients, int cookingTimeMinutes, long id = 0)
         {
             RecipeType = recipeType;
-            Stock = ingredients;
+            StockDto = ingredients;
             CookingTimeMinutes = cookingTimeMinutes;
             Id = id;
         }

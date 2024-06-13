@@ -10,9 +10,8 @@ namespace PizzaPlace.Models
 
         public PizzaContext(DbContextOptions<PizzaContext> options) : base(options) { }
 
-        public virtual DbSet<Recipe> Recipes { get; set; }
-        public virtual DbSet<Stock> Stock { get; set; }
-        public virtual DbSet<RecipeStock> RecipeStock { get; set; }
+        public virtual DbSet<RecipeDto> RecipeDtos { get; set; }
+        public virtual DbSet<StockDto> StockDtos { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -34,29 +33,24 @@ namespace PizzaPlace.Models
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
                         
-            modelBuilder.Entity<Recipe>(entity =>
+            modelBuilder.Entity<RecipeDto>(entity =>
             {
                 entity.HasKey(e => e.Id);
 
-                entity.HasMany(e => e.Stock).WithMany().UsingEntity<RecipeStock>();
+                entity.HasMany(e => e.StockDto).WithMany();
 
                 entity.Property(e => e.Id).IsRequired();
                 entity.Property(e => e.CookingTimeMinutes).IsRequired();
                 entity.Property(e => e.RecipeType).IsRequired();
             });
 
-            modelBuilder.Entity<Stock>(entity =>
+            modelBuilder.Entity<StockDto>(entity =>
             {
                 entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.Id).IsRequired();
                 entity.Property(e => e.StockType).IsRequired();
                 entity.Property(e => e.Amount).IsRequired();
-            });
-
-            modelBuilder.Entity<RecipeStock>(entity =>
-            {
-                entity.HasKey(e => new { e.RecipeId, e.StockId });
             });
 
             OnModelCreatingPartial(modelBuilder);

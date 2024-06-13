@@ -5,9 +5,9 @@ namespace PizzaPlace.Services
     public interface IStockService
     {
         Task<bool> HasInsufficientStock(
-            PizzaOrder order, ComparableList<Recipe> recipeDtos);
+            PizzaOrder order, ComparableList<RecipeDto> recipeDtos);
 
-        Task<ComparableList<Stock>> GetStock(
-            PizzaOrder order, ComparableList<Recipe> recipeDtos);
+        Task<ComparableList<StockDto>> GetStock(
+            PizzaOrder order, ComparableList<RecipeDto> recipeDtos);
     }
 }

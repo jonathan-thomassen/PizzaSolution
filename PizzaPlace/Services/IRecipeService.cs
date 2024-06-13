@@ -4,8 +4,8 @@ namespace PizzaPlace.Services
 {
     public interface IRecipeService
     {
-        Task<ComparableList<Recipe>> GetPizzaRecipes(PizzaOrder order);
-        Task<long> AddPizzaRecipe(Recipe recipe);
-        Task<long> UpdatePizzaRecipe(Recipe recipe, long id);
+        Task<ComparableList<RecipeDto>> GetPizzaRecipes(PizzaOrder order);
+        Task<long> AddPizzaRecipe(RecipeDto recipe);
+        Task<long> UpdatePizzaRecipe(RecipeDto recipe, long id);
     }
 }

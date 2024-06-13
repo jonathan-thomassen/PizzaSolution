@@ -27,18 +27,18 @@ namespace PizzaPlace.Test.Services
             new PizzaAmount(PizzaRecipeType.StandardPizza, 4),
         ];
             var order = new PizzaOrder(requests);
-            var standardRecipe = new Recipe(PizzaRecipeType.StandardPizza,
+            var standardRecipe = new RecipeDto(PizzaRecipeType.StandardPizza,
                 [
-                    new Stock(StockType.Dough, 2),
-                new Stock(StockType.Tomatoes, 1),
+                    new StockDto(StockType.Dough, 2),
+                new StockDto(StockType.Tomatoes, 1),
             ], 10);
-            var tastyRecipe = new Recipe(PizzaRecipeType.ExtremelyTastyPizza,
+            var tastyRecipe = new RecipeDto(PizzaRecipeType.ExtremelyTastyPizza,
                 [
-                    new Stock(StockType.UnicornDust, 1),
-                new Stock(StockType.BellPeppers, 2),
+                    new StockDto(StockType.UnicornDust, 1),
+                new StockDto(StockType.BellPeppers, 2),
             ], 15);
-            ComparableList<Recipe> recipes = [standardRecipe, tastyRecipe];
-            ComparableList<Stock> returnedStock = [new Stock(StockType.Anchovies, 2)]; // Doesn't matter that it doesn't match recipes.
+            ComparableList<RecipeDto> recipes = [standardRecipe, tastyRecipe];
+            ComparableList<StockDto> returnedStock = [new StockDto(StockType.Anchovies, 2)]; // Doesn't matter that it doesn't match recipes.
             ComparableList<PizzaPrepareOrder> prepareOrders =
             [
                 new PizzaPrepareOrder(standardRecipe, 58),
@@ -84,12 +84,12 @@ namespace PizzaPlace.Test.Services
                 new PizzaAmount(PizzaRecipeType.ExtremelyTastyPizza, 2),
         ];
             var order = new PizzaOrder(requests);
-            var tastyRecipe = new Recipe(PizzaRecipeType.ExtremelyTastyPizza,
+            var tastyRecipe = new RecipeDto(PizzaRecipeType.ExtremelyTastyPizza,
                 [
-                    new Stock(StockType.UnicornDust, 1),
-                new Stock(StockType.BellPeppers, 2),
+                    new StockDto(StockType.UnicornDust, 1),
+                new StockDto(StockType.BellPeppers, 2),
             ], 15);
-            ComparableList<Recipe> recipes = [tastyRecipe];
+            ComparableList<RecipeDto> recipes = [tastyRecipe];
 
             var stockService = new Mock<IStockService>(MockBehavior.Strict);
             var recipeService = new Mock<IRecipeService>(MockBehavior.Strict);
@@ -121,8 +121,8 @@ namespace PizzaPlace.Test.Services
                 new PizzaAmount(PizzaRecipeType.StandardPizza, 1),
         ];
             var order = new PizzaOrder(requests);
-            ComparableList<Recipe> recipes = [];
-            ComparableList<Stock> returnedStock = [new Stock(StockType.Anchovies, 2)]; // Doesn't matter that it doesn't match recipes.
+            ComparableList<RecipeDto> recipes = [];
+            ComparableList<StockDto> returnedStock = [new StockDto(StockType.Anchovies, 2)]; // Doesn't matter that it doesn't match recipes.
 
             var stockService = new Mock<IStockService>(MockBehavior.Strict);
             var recipeService = new Mock<IRecipeService>(MockBehavior.Strict);
