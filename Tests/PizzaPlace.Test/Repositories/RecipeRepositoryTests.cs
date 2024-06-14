@@ -10,11 +10,11 @@ public class RecipeRepositoryTests
 {
     private static RecipeRepository GetRecipeRepository() => new();
 
-    private static ComparableList<StockDto> GetStandardIngredients() =>
+    private static ComparableList<IngredientDto> GetStandardIngredients() =>
     [
-        new StockDto(StockType.Dough, 3),
-        new StockDto(StockType.Tomatoes, 10),
-        new StockDto(StockType.Bacon, 2),
+        new IngredientDto(StockType.Dough, 3),
+        new IngredientDto(StockType.Tomatoes, 10),
+        new IngredientDto(StockType.Bacon, 2),
     ];
     private const int StandardCookingTime = 19;
 
@@ -22,16 +22,20 @@ public class RecipeRepositoryTests
     public async Task AddRecipe()
     {
         // Arrange
-        var recipe = new RecipeDto(PizzaRecipeType.StandardPizza,
-                                        GetStandardIngredients(),
-                                        StandardCookingTime);
-        var repository = GetRecipeRepository();
+        RecipeDto recipe = new(
+            PizzaRecipeType.StandardPizza,
+            GetStandardIngredients(),
+            StandardCookingTime);
+        RecipeRepository repository = GetRecipeRepository();
 
         // Act
         long actual = await repository.AddRecipe(recipe);
 
         // Assert
         Assert.IsTrue(actual > 0, "Recipe has an id.");
+
+        // Cleanup
+        await repository.DeleteRecipe(recipe.Id);
     }
 
     [TestMethod]
@@ -49,8 +53,10 @@ public class RecipeRepositoryTests
         RecipeDto newRecipe = new(
             PizzaRecipeType.StandardPizza,
             [new(StockType.UnicornDust, 123), new(StockType.Anchovies, 1)],
-            StandardCookingTime);
-        newRecipe.Id = oldRecipe.Id;
+            StandardCookingTime)
+        {
+            Id = oldRecipe.Id
+        };
 
         // Act
         InvalidOperationException ex =
@@ -64,6 +70,9 @@ public class RecipeRepositoryTests
             "existing entities, ensure that only one entity instance with a given key value is " +
             "attached. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to " +
             "see the conflicting key values.", ex.Message);
+
+        // Cleanup
+        await repository.DeleteRecipe(oldRecipe.Id);
     }
 
     [TestMethod]
@@ -84,19 +93,23 @@ public class RecipeRepositoryTests
         RecipeDto? actual = await repository.GetRecipe(pizzaType);
 
         // Assert
-        Assert.AreEqual(recipe.RecipeType, actual.RecipeType);
-        Assert.AreEqual(recipe.StockDto, actual.StockDto);
+        Assert.AreEqual(recipe.RecipeType, actual?.RecipeType);
+        Assert.AreEqual(recipe.IngredientDtos, actual?.IngredientDtos);
+
+        // Cleanup
+        await repository.DeleteRecipe(recipe.Id);
     }
 
     [TestMethod]
     public async Task GetRecipe_DoesNotExist()
     {
         // Arrange
-        var pizzaType = PizzaRecipeType.ExtremelyTastyPizza;
-        var repository = GetRecipeRepository();
+        PizzaRecipeType pizzaType = PizzaRecipeType.ExtremelyTastyPizza;
+        RecipeRepository repository = GetRecipeRepository();
 
         // Act
-        var ex = await Assert.ThrowsExceptionAsync<PizzaException>(() => repository.GetRecipe(pizzaType));
+        PizzaException ex = await Assert
+            .ThrowsExceptionAsync<PizzaException>(() => repository.GetRecipe(pizzaType));
 
         // Assert
         Assert.AreEqual("Recipe does not exists of type ExtremelyTastyPizza.", ex.Message);

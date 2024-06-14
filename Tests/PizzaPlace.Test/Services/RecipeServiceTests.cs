@@ -18,17 +18,17 @@ namespace PizzaPlace.Test.Services
         {
             // Arrange
             PizzaOrder order = new([
-                new PizzaAmount(PizzaRecipeType.RarePizza, 1),
-                new PizzaAmount(PizzaRecipeType.OddPizza, 2),
-                new PizzaAmount(PizzaRecipeType.RarePizza, 20),
+                new(PizzaRecipeType.RarePizza, 1),
+                new(PizzaRecipeType.OddPizza, 2),
+                new(PizzaRecipeType.RarePizza, 20),
             ]);
             RecipeDto rareRecipe = new(
                 PizzaRecipeType.RarePizza,
-                [new StockDto(StockType.UnicornDust, 1)],
+                [new(StockType.UnicornDust, 1)],
                 1);
             RecipeDto oddRecipe = new(
                 PizzaRecipeType.OddPizza,
-                [new StockDto(StockType.Sulphur, 10)],
+                [new(StockType.Sulphur, 10)],
                 100);
             ComparableList<RecipeDto> expected = [rareRecipe, oddRecipe];
 

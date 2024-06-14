@@ -15,26 +15,26 @@ public class StockRepositoryTests
     {
         // Arrange
         int addedAmount = 10;
-        StockDto stock = new StockDto(StockType.TrippleBacon, addedAmount);
+        StockDto stock = new(StockType.TrippleBacon, addedAmount);
         StockRepository repository = GetStockRepository();
 
         // Act
-        StockDto actual = await repository.AddToStock(stock);
+        StockDto? actual = await repository.AddToStock(stock);
 
         // Assert
-        Assert.IsTrue(actual.Amount >= addedAmount);
+        Assert.IsTrue(actual?.Amount >= addedAmount);
     }
 
     [TestMethod]
     public async Task AddToStock_MoreThanOnce()
     {
         // Arrange
-        var addedAmount = 10;
-        var secondAddedAmount = 13;
-        var expectedLeastAmount = addedAmount + secondAddedAmount;
-        var stock1 = new StockDto(StockType.UnicornDust, addedAmount);
-        var stock2 = new StockDto(StockType.UnicornDust, secondAddedAmount);
-        var repository = GetStockRepository();
+        int addedAmount = 10;
+        int secondAddedAmount = 13;
+        int expectedLeastAmount = addedAmount + secondAddedAmount;
+        StockDto stock1 = new(StockType.UnicornDust, addedAmount);
+        StockDto stock2 = new(StockType.UnicornDust, secondAddedAmount);
+        StockRepository repository = GetStockRepository();
 
         // Act
         await repository.AddToStock(stock1);
@@ -48,12 +48,13 @@ public class StockRepositoryTests
     public async Task AddToStock_NegativeAmount()
     {
         // Arrange
-        var addedAmount = -10;
-        var stock = new StockDto(StockType.TrippleBacon, addedAmount);
-        var repository = GetStockRepository();
+        int addedAmount = -10;
+        StockDto stock = new(StockType.TrippleBacon, addedAmount);
+        StockRepository repository = GetStockRepository();
 
         // Act
-        var ex = await Assert.ThrowsExceptionAsync<PizzaException>(() => repository.AddToStock(stock));
+        PizzaException ex =
+            await Assert.ThrowsExceptionAsync<PizzaException>(() => repository.AddToStock(stock));
 
         // Assert
         Assert.AreEqual("Stock cannot have negative amount.", ex.Message);
@@ -63,8 +64,8 @@ public class StockRepositoryTests
     public async Task GetStock()
     {
         // Arrange
-        var stockType = StockType.UngenericSpices;
-        var repository = GetStockRepository();
+        StockType stockType = StockType.UngenericSpices;
+        StockRepository repository = GetStockRepository();
 
         // Act
         StockDto? actual = await repository.GetStock(stockType);
@@ -98,15 +99,15 @@ public class StockRepositoryTests
     public async Task TakeStock()
     {
         // Arrange
-        var stockType = StockType.FermentedDough;
-        var amount = 7;
-        var repository = GetStockRepository();
+        StockType stockType = StockType.FermentedDough;
+        int amount = 7;
+        StockRepository repository = GetStockRepository();
         // Ensure stock is present.
-        await repository.AddToStock(new StockDto(stockType, amount + 5));
-        var expected = new StockDto(stockType, amount);
+        await repository.AddToStock(new(stockType, amount + 5));
+        StockDto expected = new(stockType, amount);
 
         // Act
-        var actual = await repository.TakeStock(stockType, amount);
+        StockDto actual = await repository.TakeStock(stockType, amount);
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -118,12 +119,14 @@ public class StockRepositoryTests
     public async Task TakeStock_NegativeAmount(int amount)
     {
         // Arrange
-        var stockType = StockType.FermentedDough;
-        var repository = GetStockRepository();
+        StockType stockType = StockType.FermentedDough;
+        StockRepository repository = GetStockRepository();
         await repository.AddToStock(new StockDto(stockType, 5)); // Ensure stock is present.
 
         // Act
-        var ex = await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => repository.TakeStock(stockType, amount));
+        ArgumentOutOfRangeException ex =
+            await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(
+                () => repository.TakeStock(stockType, amount));
 
         // Assert
         Assert.AreEqual("Unable to take zero or negative amount. (Parameter 'amount')", ex.Message);

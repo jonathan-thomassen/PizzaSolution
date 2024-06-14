@@ -12,6 +12,7 @@ namespace PizzaPlace.Models
 
         public virtual DbSet<RecipeDto> RecipeDtos { get; set; }
         public virtual DbSet<StockDto> StockDtos { get; set; }
+        public virtual DbSet<IngredientDto> IngredientDtos { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -37,9 +38,8 @@ namespace PizzaPlace.Models
             {
                 entity.HasKey(e => e.Id);
 
-                entity.HasMany(e => e.StockDto).WithMany();
+                entity.HasMany(e => e.IngredientDtos).WithOne();
 
-                entity.Property(e => e.Id).IsRequired();
                 entity.Property(e => e.CookingTimeMinutes).IsRequired();
                 entity.Property(e => e.RecipeType).IsRequired();
             });
@@ -48,7 +48,14 @@ namespace PizzaPlace.Models
             {
                 entity.HasKey(e => e.Id);
 
-                entity.Property(e => e.Id).IsRequired();
+                entity.Property(e => e.StockType).IsRequired();
+                entity.Property(e => e.Amount).IsRequired();
+            });
+
+            modelBuilder.Entity<IngredientDto>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
                 entity.Property(e => e.StockType).IsRequired();
                 entity.Property(e => e.Amount).IsRequired();
             });

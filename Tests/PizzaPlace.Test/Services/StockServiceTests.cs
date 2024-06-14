@@ -21,8 +21,10 @@ namespace PizzaPlace.Test.Services
 
             RecipeDto recipeDto = new(
                 Models.Types.PizzaRecipeType.StandardPizza,
-                [new StockDto(Models.Types.StockType.Dough, 1),
-                    new StockDto(Models.Types.StockType.Tomatoes, 1)],
+                [
+                    new(Models.Types.StockType.Dough, 1),
+                    new(Models.Types.StockType.Tomatoes, 1)
+                ],
                 12);
 
             bool expected = true;
@@ -47,8 +49,10 @@ namespace PizzaPlace.Test.Services
 
             RecipeDto recipeDto = new(
                 Models.Types.PizzaRecipeType.StandardPizza,
-                [new StockDto(Models.Types.StockType.Dough, 1),
-                    new StockDto(Models.Types.StockType.Tomatoes, 1)],
+                [
+                    new(Models.Types.StockType.Dough, 1),
+                    new(Models.Types.StockType.Tomatoes, 1)
+                ],
                 12);
 
             ComparableList<StockDto> expected = [];

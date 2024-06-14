@@ -20,25 +20,30 @@ namespace PizzaPlace.Test.Services
         {
             // Arrange
             ComparableList<PizzaAmount> requests =
-            [
-                new PizzaAmount(PizzaRecipeType.StandardPizza, 54),
-            new PizzaAmount(PizzaRecipeType.ExtremelyTastyPizza, 2),
-            new PizzaAmount(PizzaRecipeType.StandardPizza, 0),
-            new PizzaAmount(PizzaRecipeType.StandardPizza, 4),
-        ];
+                [
+                    new PizzaAmount(PizzaRecipeType.StandardPizza, 54),
+                    new PizzaAmount(PizzaRecipeType.ExtremelyTastyPizza, 2),
+                    new PizzaAmount(PizzaRecipeType.StandardPizza, 0),
+                    new PizzaAmount(PizzaRecipeType.StandardPizza, 4),
+                ];
             var order = new PizzaOrder(requests);
-            var standardRecipe = new RecipeDto(PizzaRecipeType.StandardPizza,
+            var standardRecipe = new RecipeDto(
+                PizzaRecipeType.StandardPizza,
                 [
-                    new StockDto(StockType.Dough, 2),
-                new StockDto(StockType.Tomatoes, 1),
-            ], 10);
-            var tastyRecipe = new RecipeDto(PizzaRecipeType.ExtremelyTastyPizza,
+                    new IngredientDto(StockType.Dough, 2),
+                    new IngredientDto(StockType.Tomatoes, 1),
+                ],
+                10);
+            var tastyRecipe = new RecipeDto(
+                PizzaRecipeType.ExtremelyTastyPizza,
                 [
-                    new StockDto(StockType.UnicornDust, 1),
-                new StockDto(StockType.BellPeppers, 2),
-            ], 15);
+                    new IngredientDto(StockType.UnicornDust, 1),
+                    new IngredientDto(StockType.BellPeppers, 2)
+                ],
+                15);
             ComparableList<RecipeDto> recipes = [standardRecipe, tastyRecipe];
-            ComparableList<StockDto> returnedStock = [new StockDto(StockType.Anchovies, 2)]; // Doesn't matter that it doesn't match recipes.
+            ComparableList<StockDto> returnedStock = [new StockDto(StockType.Anchovies, 2)];
+            // Doesn't matter that it doesn't match recipes.
             ComparableList<PizzaPrepareOrder> prepareOrders =
             [
                 new PizzaPrepareOrder(standardRecipe, 58),
@@ -84,11 +89,13 @@ namespace PizzaPlace.Test.Services
                 new PizzaAmount(PizzaRecipeType.ExtremelyTastyPizza, 2),
         ];
             var order = new PizzaOrder(requests);
-            var tastyRecipe = new RecipeDto(PizzaRecipeType.ExtremelyTastyPizza,
+            var tastyRecipe = new RecipeDto(
+                PizzaRecipeType.ExtremelyTastyPizza,
                 [
-                    new StockDto(StockType.UnicornDust, 1),
-                new StockDto(StockType.BellPeppers, 2),
-            ], 15);
+                    new(StockType.UnicornDust, 1),
+                    new(StockType.BellPeppers, 2),
+                ],
+                15);
             ComparableList<RecipeDto> recipes = [tastyRecipe];
 
             var stockService = new Mock<IStockService>(MockBehavior.Strict);

@@ -3,7 +3,7 @@
 namespace PizzaPlace.Models.Types
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public enum IngredientType
+    public enum StockType
     {
         Dough,
         FermentedDough,

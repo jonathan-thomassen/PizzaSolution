@@ -55,7 +55,7 @@ namespace PizzaPlace.Repositories
 
         public async Task DeleteRecipe(long id)
         {
-            Recipe? recipe = await s_dbContext.FindAsync<Recipe>(id);
+            RecipeDto? recipe = await s_dbContext.FindAsync<RecipeDto>(id);
 
             if (recipe != null)
             {

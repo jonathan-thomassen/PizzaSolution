@@ -14,7 +14,7 @@ namespace PizzaPlace.Services
                 {
                     if (pizza.PizzaType == recipe.RecipeType)
                     {
-                        foreach (StockDto ingredient in recipe.StockDto)
+                        foreach (IngredientDto ingredient in recipe.IngredientDtos)
                         {
                             StockDto? stockDto =
                                 await stockRepository.GetStock(ingredient.StockType);
@@ -41,7 +41,7 @@ namespace PizzaPlace.Services
                 {
                     if (pizza.PizzaType == recipe.RecipeType)
                     {
-                        foreach (StockDto ingredient in recipe.StockDto)
+                        foreach (IngredientDto ingredient in recipe.IngredientDtos)
                         {
                             StockDto? stockDto =
                                 await stockRepository.GetStock(ingredient.StockType);
