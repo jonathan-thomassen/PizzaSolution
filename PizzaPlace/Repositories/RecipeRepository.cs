@@ -11,7 +11,19 @@ namespace PizzaPlace.Repositories
 
         public async Task<long> AddRecipe(RecipeDto recipe)
         {
-            await s_dbContext.AddAsync(recipe);
+            try
+            {
+                await s_dbContext.AddAsync(recipe);
+            }
+            catch (InvalidOperationException)
+            {
+                lock (s_lock)
+                {
+                    s_dbContext.Remove(recipe);
+                    throw;
+                }
+            }
+
             await s_dbContext.SaveChangesAsync();
 
             return recipe.Id;
@@ -37,7 +49,23 @@ namespace PizzaPlace.Repositories
             RecipeDto? recipe =
                 await s_dbContext.RecipeDtos.FirstOrDefaultAsync(r => r.RecipeType == recipeType);
 
-            return recipe;
+            return recipe ?? throw new PizzaException(
+                $"Recipe does not exists of type {recipeType}.");
+        }
+
+        public async Task DeleteRecipe(long id)
+        {
+            Recipe? recipe = await s_dbContext.FindAsync<Recipe>(id);
+
+            if (recipe != null)
+            {
+                lock (s_lock)
+                {
+                    s_dbContext.Entry(recipe).State = EntityState.Deleted;
+                }
+
+                await s_dbContext.SaveChangesAsync();
+            }
         }
     }
 }
